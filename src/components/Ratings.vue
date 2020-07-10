@@ -1,5 +1,5 @@
 <template>
-  <div class="ratings container">
+  <div class="ratings main-container">
     <h1>How Your Favorite Business Earned its Rank</h1>
     <p>All BusinessRate Ratings are Based on 3 Key Factors:</p>
     <img src="@/assets/ratings.jpg" class="ratings-img" />
@@ -15,8 +15,9 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 
 <style scoped>
-.ratings.container {
+.ratings.main-container {
   background-color: white;
+    font-family: "Playfair Display", serif;
   padding: 25vw 5vw 20vw;
 }
 
@@ -37,7 +38,7 @@ export default {
 }
 
 @media screen and (min-width: 640px) {
-  .ratings.container {
+  .ratings.main-container {
     padding: 10vw;
   }
   .ratings h1 {
@@ -51,7 +52,7 @@ export default {
 
 @media screen and (min-width: 1200px) {
 
-   .ratings.container {
+   .ratings.main-container {
     padding: 6vw;
   }
 

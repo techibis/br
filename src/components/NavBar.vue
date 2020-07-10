@@ -1,6 +1,6 @@
 <template>
   <header>
-    <div class="nav container">
+    <div class="nav main-container">
       <nav>
         <div class="menu-icons" @click="show">
           <i class="icon ion-md-menu"></i>
@@ -65,12 +65,12 @@
             </ul>
           </li>
           <li>
-            <router-link to="/login">Login/Sign Up</router-link>
+            <router-link to="/login-signup">Login/Sign Up</router-link>
           </li>
         </ul>
       </nav>
     </div>
-    <img src="@/assets/gold-striped-background-1.jpg" class="border" />
+    <img src="@/assets/gold-striped-background-1.jpg" class="img-border" />
   </header>
 </template>
 
@@ -89,7 +89,7 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 
 <style scoped>
-a {
+li a {
   text-decoration: none;
   color: white;
 }
@@ -103,6 +103,7 @@ header {
   position: sticky;
   top: 0;
   left: 0;
+  font-family: "Playfair Display", serif;
   z-index: 100;
 }
 
@@ -121,6 +122,7 @@ header {
 .nav {
   font-family: "Playfair Display", serif;
   background-color: black;
+  padding-left: 4vw;
 }
 
 nav {
@@ -188,7 +190,7 @@ nav {
   margin-left: 1rem;
   width: 90vw;
   z-index: 100;
-  max-height:0;
+  max-height: 0;
   opacity: 0;
   visibility: hidden;
   transition: all 650ms ease;
@@ -203,7 +205,6 @@ nav {
   visibility: visible;
   max-height: initial;
 }
-
 
 .ion-md-close {
   display: none;
@@ -265,7 +266,7 @@ nav.active .nav-list {
   }
 
   ul.sub-menu li a {
-    padding: 0 1.5vw;
+    padding: 0 1vw;
     font-size: 2vw;
   }
 
@@ -279,7 +280,8 @@ nav.active .nav-list {
   }
 
   .nav-list li:hover > .sub-menu {
-    top: 8rem;
+    top: 6rem;
+    left: 1rem;
     opacity: 1;
     visibility: visible;
   }
@@ -304,9 +306,10 @@ nav.active .nav-list {
     height: 8vh;
   }
   .sub-menu {
-    width: 20vw;
+    width: 17vw;
   }
-    ul.sub-menu li a {
+
+  ul.sub-menu li a {
     font-size: 1.3vw;
   }
 }
@@ -315,15 +318,37 @@ nav.active .nav-list {
   .nav-list a {
     font-size: 1.3vw;
   }
-  .sub-menu {
-    width: 20vw;
-  }
 
   .nav-list a {
     padding: 0 3vw;
-        line-height: 2;
+    line-height: 2;
   }
 }
 
+@media screen and (min-width: 1900px) {
+  .nav-list li:hover > .sub-menu {
+    top: 7rem;
+    left: 3rem;
+  }
+}
 
+@media screen and (min-width: 2400px) {
+  .nav-list li:hover > .sub-menu {
+    top: 8rem;
+    left: 4rem;
+  }
+}
+
+@media screen and (min-width: 2900px) {
+  .nav-list li:hover > .sub-menu {
+    top: 9rem;
+    left: 6rem;
+  }
+}
+@media screen and (min-width: 4500px) {
+  .nav-list li:hover > .sub-menu {
+    top: 14rem;
+    left: 8rem;
+  }
+}
 </style>

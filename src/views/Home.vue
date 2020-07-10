@@ -7,7 +7,6 @@
     <List />
     <Badge />
     <Video />
-    <Footer />
   </div>
 </template>
 
@@ -19,7 +18,7 @@ import Ratings from "../components/Ratings.vue";
 import List from "../components/List.vue";
 import Badge from "../components/Badge.vue";
 import Video from "../components/Video.vue";
-import Footer from "../components/Footer.vue";
+
 
 export default {
   name: "Home",
@@ -31,7 +30,6 @@ export default {
     List,
     Badge,
     Video,
-    Footer,
   },
 };
 </script>

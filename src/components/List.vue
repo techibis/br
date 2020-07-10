@@ -37,6 +37,7 @@ export default {
 <style scoped>
 .list-container {
   padding: 20vw 5vw;
+    font-family: "Playfair Display", serif;
   display: flex;
   flex-direction: column;
   background-size: cover;

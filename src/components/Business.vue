@@ -1,5 +1,5 @@
 <template>
-  <div class="business container">
+  <div class="business main-container">
     <h1>It is Fast and Easy to Find Best Rated Businesses in Your Area.</h1>
     <div class="businesses">
       <div class="restaurant">
@@ -47,9 +47,10 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 
 <style scoped>
-.business.container {
+.business.main-container {
   background-color: white;
   padding: 20vw 5vw 5vw;
+    font-family: "Playfair Display", serif;
 }
 
 .business h1 {
@@ -104,7 +105,7 @@ export default {
     justify-content: space-between;
   }
 
-  .business.container {
+  .business.main-container {
     padding: 10vw 5vw;
   }
 
@@ -154,7 +155,7 @@ export default {
     font-size: 2vw;
   }
 
-  .business.container {
+  .business.main-container {
     padding: 8vw;
   }
   .business h1 {

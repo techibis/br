@@ -11,7 +11,7 @@
         </h1>
       </div>
     </div>
-    <img src="@/assets/gold-striped-background-1.jpg" class="map border" />
+    <img src="@/assets/gold-striped-background-1.jpg" class="map img-border" />
   </div>
 </template>
 
@@ -33,6 +33,7 @@ export default {
 
 .map-container {
   padding: 20vw 5vw;
+    font-family: "Playfair Display", serif;
   display: flex;
   flex-direction: column;
   background-size: cover;
@@ -54,7 +55,7 @@ export default {
   margin-bottom: 10vw;
 }
 
-.map.border {
+.map.img-border {
   box-shadow: 7px 15px #cecece;
   position:absolute;
 }

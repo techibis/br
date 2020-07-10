@@ -1,6 +1,6 @@
 <template>
   <div class="badge-container">
-    <div class="badge">
+    <div>
       <div class="badge-text">
         <h1>Look for Businesses With This Sign of Quality</h1>
       </div>
@@ -23,9 +23,10 @@ export default {
 .badge-container {
   padding: 20vw 5vw;
   background-color: black;
+  font-family: "Playfair Display", serif;
 }
 
-.badge {
+.badge-container > div {
   display: flex;
   flex-direction: column;
   border-left: 15px solid #f6d185;
@@ -69,8 +70,8 @@ export default {
     padding: 5vw;
   }
 
-  .badge {
-    padding:3vw 5vw;
+  .badge-container > div {
+    padding: 3vw 5vw;
     flex-direction: row;
     justify-content: space-between;
   }
@@ -89,14 +90,13 @@ export default {
 
   .badge-text h1 {
     font-size: 4vw;
-    margin-bottom:auto;
+    margin-bottom: auto;
   }
 }
 
 @media screen and (min-width: 1200px) {
-
-   .badge-text h1 {
+  .badge-text h1 {
     font-size: 3.5vw;
-   }
+  }
 }
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <div :style="{ backgroundImage: `url(${bg1})` }" class="form container">
+  <div :style="{ backgroundImage: `url(${bg1})` }" class="form main-container">
     <div :style="{ backgroundImage: `url(${bg2})` }" class="bg">
       <div class="heading">
         <h1>Search for the Best Businesses at BusinessRate</h1>
@@ -35,7 +35,7 @@
         </div>
       </div>
     </div>
-    <img src="@/assets/gold-striped-background-1.jpg" class="border" />
+    <img src="@/assets/gold-striped-background-1.jpg" class="img-border" />
   </div>
 </template>
 
@@ -63,12 +63,13 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 
 <style scoped>
-.form.container {
+.form.main-container {
   padding: 15vw 0vw 0vw;
   width: 100%;
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
+    font-family: "Playfair Display", serif;
 }
 
 .bg {
@@ -97,7 +98,7 @@ export default {
 
 .input {
   border-radius: 40px;
-  padding: 30px;
+  padding: 20px;
   width: 75vw;
   border: transparent;
   color: black;
@@ -120,7 +121,6 @@ export default {
   display: inline-block;
   cursor: pointer;
   color: #333333;
-  font-family: Arial;
   font-size: 16px;
   font-weight: bold;
   text-decoration: none;
@@ -132,8 +132,8 @@ export default {
   background-color: #ffab23;
 }
 
-.form.container img.border {
-  box-shadow: 7px 15px #cecece;
+.form.main-container img.img-border {
+  box-shadow: 7px 12px #cecece;
 }
 
 @media only screen and (device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 3) {
@@ -159,7 +159,7 @@ export default {
 }
 
 @media screen and (min-width: 640px) {
-  .form.container {
+  .form.main-container {
     padding: 10vw 0vw 0vw;
   }
 
@@ -189,6 +189,8 @@ export default {
 
   .input {
     width: 30vw;
+
+    padding: 30px;
   }
 }
 
@@ -234,5 +236,8 @@ export default {
     font-size: 2vw;
     margin-bottom: 3vw;
   }
+  .form.main-container img.img-border {
+  box-shadow: 7px 15px #cecece;
+}
 }
 </style>

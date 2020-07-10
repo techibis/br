@@ -4,21 +4,27 @@
       <span class="video-text">
         Watch the BusinessRate Video
       </span>
-      <button class="play" @click="play">
-        <img class src="@/assets/TRL-Play-Button.png" />
+      <button class="play" @click="showModal = true">
+        <img src="@/assets/TRL-Play-Button.png" />
+        <modal v-if="showModal" @close="showModal = false"> </modal>
       </button>
     </div>
   </div>
 </template>
 
 <script>
+import modal from "./Modal.vue";
 export default {
   name: "Video",
-  methods: {
-    play: () => {
-      alert("video playing");
-    },
+  components: {
+    modal,
   },
+  data() {
+    return {
+      showModal: false,
+    };
+  },
+
 };
 </script>
 
@@ -30,6 +36,7 @@ export default {
   background-color: white;
   padding: 8vw 5vw;
   display: flex;
+  font-family: "Playfair Display", serif;
   flex-direction: column;
   justify-content: center;
 }
@@ -64,7 +71,7 @@ export default {
   }
 }
 
-@media screen and (min-width: 120px) {
+@media screen and (min-width: 1200px) {
   .video-text {
     font-size: 2.5vw;
   }
