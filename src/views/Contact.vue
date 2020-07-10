@@ -51,6 +51,7 @@ export default {
 .feedbackButton {
   box-shadow: 0px 1px 0px 0px #fff6af;
   border-radius: 20px;
+    background: linear-gradient(to bottom, #ffec64 5%, #ffab23 100%);
   border: 1px solid #ffaa22;
   display: inline-block;
   cursor: pointer;
@@ -62,7 +63,8 @@ export default {
 }
 
 .feedbackButton:hover {
-  background-color: rgba(0, 0, 0, 0.1);
+  background: linear-gradient(to bottom, #ffab23 5%, #ffec64 100%);
+  background-color: #ffab23;
 }
 
 .feedbackButton:active {
