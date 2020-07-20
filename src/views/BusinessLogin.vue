@@ -3,7 +3,7 @@
     <div class="form-header">
       <h1>Login</h1>
        <hr style="margin-bottom:40px">
-      <Login person="Business" />
+      <Login/>
     </div>
   </div>
 </template>

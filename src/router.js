@@ -8,9 +8,34 @@ export default new Router({
   mode: "history",
   routes: [
     {
+      path: "/vue-admin",
+      name: "AdminDashboard",
+      component: () => import("./views/AdminDashboard.vue"),
+    },
+    {
       path: "/",
       name: "Home",
       component: Home,
+    },
+    {
+      path: "/companys",
+      name: "Results",
+      component: () => import("./views/Results.vue"),
+    },
+    {
+      path: "/:company/:cid",
+      name: "SingleResult",
+      component: () => import("./views/SingleResult.vue"),
+    },
+    {
+      path: "/vue-admin/edit/:company/:cid",
+      name: "ApproveBusiness",
+      component: () => import("./views/ApproveBusiness.vue"),
+    },
+    {
+      path: "/reviews/:company/:cid",
+      name: "Reviews",
+      component: () => import("./views/Reviews.vue"),
     },
     {
       path: "/about",
@@ -86,6 +111,16 @@ export default new Router({
       path: "/report-spam",
       name: "Contact",
       component: () => import("./views/Contact.vue"),
+    },
+    {
+      path: "/rdashboard",
+      name: "ReviewerDashboard",
+      component: () => import("./views/ReviewerDashboard.vue"),
+    },
+    {
+      path: "/bdashboard",
+      name: "BusinessDashboard",
+      component: () => import("./views/BusinessDashboard.vue"),
     },
   ],
 });

@@ -1,17 +1,13 @@
 <template>
   <div class="login">
-    <b-form @submit="onSubmit" v-if="show">
+    <b-form @submit.prevent="onSubmit">
+      <p class="red" v-if="show">Email or Password wrong!</p>
       <b-form-group
         id="input-group-1"
         label="Email Address"
         label-for="input-1"
       >
-        <b-form-input
-          id="input-1"
-          required
-          v-model="user.email"
-          type="email"
-        >
+        <b-form-input id="input-1" required v-model="email" type="email">
         </b-form-input>
       </b-form-group>
 
@@ -19,7 +15,7 @@
         <b-form-input
           id="input-2"
           required
-          v-model="user.password"
+          v-model="password"
           type="password"
         ></b-form-input>
       </b-form-group>
@@ -30,43 +26,97 @@
 
 <script>
 import Vue from "vue";
+
 import { BootstrapVue } from "bootstrap-vue";
 import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap-vue/dist/bootstrap-vue.css";
-
 Vue.use(BootstrapVue);
+
+var md5 = require("md5");
+
+import VueSession from "vue-session";
+Vue.use(VueSession);
+
+import getUserQuery from "../query/login.js";
 
 export default {
   name: "Login",
-  props: ["person"],
   data() {
     return {
-      user: {
-        email: "",
-        password: "",
-      },
-      show:true,
+      email: "",
+      password: "",
+      user: null,
+      show: false,
     };
   },
+  apollo: {
+    user: {
+      query: getUserQuery,
+      variables() {
+        return {
+          email: this.email,
+          password: this.password,
+        };
+      },
+      skip() {
+        return this.skipQuery;
+      },
+    },
+  },
+
+  beforeCreate() {
+    // checking if session exist
+    if (this.$session.exists()) {
+      if (this.$session.get("type") === "A") this.$router.push("/vue-admin");
+      if (this.$session.get("type") === "B") this.$router.push("/bdashboard");
+      if (this.$session.get("type") === "R") this.$router.push("/rdashboard");
+    }
+  },
+
   methods: {
-    onSubmit(evt) {
-      evt.preventDefault();
-      alert(JSON.stringify(this.user));
-      this.resetUser();
-        this.show = false;
-      this.$nextTick(() => {
+    async onSubmit() {
+      this.password = md5(this.password);
+      this.$apollo.queries.user.skip = false;
+      await this.$apollo.queries.user.refetch();
+      this.login();
+    },
+
+    login() {
+      if (this.user) {
+        this.$session.set("loginid", this.user.loginid);
+        this.$session.set("email", this.user.email);
+        this.$session.set("type", this.user.type);
+        this.$session.set("fname", this.user.fname);
+        this.$session.set("lname", this.user.lname);
+        console.log(this.user.type);
+
+        if (this.user.email == this.email && this.user.type == "A") {
+          this.$router.push("/vue-admin");
+        }
+        if (this.user.email == this.email && this.user.type == "B") {
+          this.$router.push("/bdashboard");
+        }
+        if (this.user.email == this.email && this.user.type == "R") {
+          this.$router.push("/rdashboard");
+        }
+        this.resetUser();
         this.show = true;
-      });
+      }
     },
     resetUser() {
-      this.user.email = "";
-      this.user.password = "";
+      this.email = "";
+      this.password = "";
     },
   },
 };
 </script>
 
 <style scoped>
+.red {
+  color: red;
+  font-style: italic;
+  font-size: 12px;
+}
 .login {
   text-align: left;
   font-size: 4vw;
@@ -132,7 +182,6 @@ export default {
     font-size: 1.5vw;
   }
 }
-
 
 @media screen and (min-width: 1200px) {
   .login {

@@ -1,72 +1,71 @@
 <template>
   <div class="signup">
-    <b-form @submit="onSubmit" v-if="show">
+    <b-form @submit.prevent="onSubmit">
+      <p v-if="success" class="red">
+        You have successfully creates an account. Please log in.
+      </p>
+      <p v-if="exist" class="red">
+        An account already exist with this email.
+      </p>
+      <p v-if="show" class="red">
+        Password doesn't match
+      </p>
+      <div class="row">
+        <div class="form-group col-md-6">
+          <b-form-group
+            id="input-group-1"
+            label="First Name"
+            label-for="input-1"
+          >
+            <b-form-input id="input-1" required v-model="fname" type="text">
+            </b-form-input>
+          </b-form-group>
+        </div>
+        <div class="form-group col-md-6">
+          <b-form-group
+            id="input-group-2"
+            label="Last Name"
+            label-for="input-2"
+          >
+            <b-form-input id="input-2" required v-model="lname" type="text">
+            </b-form-input>
+          </b-form-group>
+        </div>
+      </div>
       <b-form-group
-        id="input-group-1"
-        label="Business Name"
-        label-for="input-1"
-      >
-        <b-form-input
-          id="input-1"
-          required
-          v-model="user.businessName"
-          type="text"
-        >
-        </b-form-input>
-      </b-form-group>
-      <b-form-group id="input-group-2" label="First Name" label-for="input-2">
-        <b-form-input
-          id="input-2"
-          required
-          v-model="user.firstName"
-          type="text"
-        >
-        </b-form-input>
-      </b-form-group>
-      <b-form-group id="input-group-3" label="Last Name" label-for="input-3">
-        <b-form-input
-          id="input-3"
-          required
-          v-model="user.lastName"
-          type="text"
-        >
-        </b-form-input>
-      </b-form-group>
-      <b-form-group
-        id="input-group-4"
+        id="input-group-3"
         label="Email Address"
-        label-for="input-4"
+        label-for="input-3"
       >
-        <b-form-input
-          id="input-4"
-          required
-          v-model="user.email"
-          type="email"
-        >
+        <b-form-input id="input-3" required v-model="email" type="email">
         </b-form-input>
       </b-form-group>
-
-      <b-form-group id="input-group-5" label="Password" label-for="input-5">
-        <b-form-input
-          id="input-5"
-          required
-          v-model="user.password"
-          type="password"
-        ></b-form-input>
-      </b-form-group>
-
-      <b-form-group
-        id="input-group-6"
-        label="PasswordCheck"
-        label-for="input-6"
-      >
-        <b-form-input
-          id="input-6"
-          required
-          v-model="user.passwordCheck"
-          type="password"
-        ></b-form-input>
-      </b-form-group>
+      <div class="row">
+        <div class="form-group col-md-6">
+          <b-form-group id="input-group-4" label="Password" label-for="input-4">
+            <b-form-input
+              id="input-4"
+              required
+              v-model="password"
+              type="password"
+            ></b-form-input>
+          </b-form-group>
+        </div>
+        <div class="form-group col-md-6">
+          <b-form-group
+            id="input-group-5"
+            label="Verify Password"
+            label-for="input-5"
+          >
+            <b-form-input
+              id="input-5"
+              required
+              v-model="passwordCheck"
+              type="password"
+            ></b-form-input>
+          </b-form-group>
+        </div>
+      </div>
       <b-button type="submit" class="submitButton">Submit</b-button>
     </b-form>
   </div>
@@ -77,48 +76,115 @@ import Vue from "vue";
 import { BootstrapVue } from "bootstrap-vue";
 import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap-vue/dist/bootstrap-vue.css";
+var md5 = require("md5");
 
 Vue.use(BootstrapVue);
 
+import checkEmailQuery from "../query/checkEmail.js";
+import addUserMutation from "../query/addUser.js";
+
 export default {
-  name: "Login",
-  data() {
+  name: "SignUp",
+  props: ["source"],
+  data(props) {
     return {
-      user: {
-        businessName: "",
-        firstName: "",
-        lastName: "",
-        email: "",
-        password: "",
-        passwordCheck: "",
-      },
-      show: true,
+      email: "",
+      password: "",
+      type: props.source,
+      fname: "",
+      lname: "",
+      active: 1,
+      passwordCheck: "",
+      show: false,
+      exist: false,
+      success: false,
     };
   },
-  methods: {
-    onSubmit(evt) {
-      evt.preventDefault();
-      alert(JSON.stringify(this.user));
-      /* let user = Object.assign({}, this.user); */
-      this.resetUser();
-      this.show = false;
-      this.$nextTick(() => {
-        this.show = true;
-      });
+
+  apollo: {
+    checkEmail: {
+      query: checkEmailQuery,
+      variables() {
+        return {
+          email: this.email,
+        };
+      },
+      skip() {
+        return this.skipQuery;
+      },
     },
-    resetUser() {
-      this.user.businessName = "";
-      this.user.firstName = "";
-      this.user.lastName = "";
-      this.user.email = "";
-      this.user.password = "";
-      this.user.passwordCheck = "";
+  },
+
+  methods: {
+    async onSubmit() {
+      this.$apollo.queries.checkEmail.skip = false;
+      await this.$apollo.queries.checkEmail.refetch();
+
+      if (this.checkEmail === null) {
+        this.signup();
+      } else {
+        this.resetForm();
+        this.exist = true;
+      }
+    },
+
+    signup() {
+      this.password = md5(this.password);
+      this.passwordCheck = md5(this.passwordCheck);
+
+      if (this.password === this.passwordCheck) {
+        this.$apollo.mutate({
+          mutation: addUserMutation,
+          variables: {
+            email: this.email,
+            password: this.password,
+            type: this.type,
+            fname: this.fname,
+            lname: this.lname,
+            active: this.active,
+          },
+          update: (cache, { data: { addUser } }) => {
+            console.log(addUser);
+          },
+        });
+        this.resetForm();
+        this.exist = false;
+        this.show = false;
+        this.success = true;
+      } else {
+        this.resetForm();
+        this.exist = false;
+        this.show = true;
+      }
+    },
+
+    resetForm() {
+      this.fname = "";
+      this.lname = "";
+      this.email = "";
+      this.password = "";
+      this.passwordCheck = "";
     },
   },
 };
 </script>
 
 <style scoped>
+.red {
+  color: red;
+  font-style: italic;
+  font-size: 12px;
+}
+
+.form.container {
+  padding: 3vw 6vw;
+}
+
+.form-group.col-md-6 {
+  margin-bottom: 0;
+}
+/* Form Design On App Component */
+
 .signup {
   text-align: left;
   font-size: 4vw;

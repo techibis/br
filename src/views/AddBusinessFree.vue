@@ -10,9 +10,9 @@
       </h2>
       <p>
         <a href="/business-signup">Sign Up</a> or <a href="/business-login">Login </a> first to
-        track your suggested business
+        track your business
       </p>
-      <AddBusiness source="Business Owner"></AddBusiness>
+      <AddBusiness source="0"></AddBusiness>
     </div>
   </div>
 </template>

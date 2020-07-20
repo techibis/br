@@ -8,33 +8,42 @@
           instantly view their latest ratings and reviews
         </p>
       </div>
-      <div class="input-container">
-        <div>
-          <input
-            type="text"
-            v-model="location"
-            placeholder="Current Location"
-            class="input input1"
-          />
+      <form @submit="onSubmit">
+        <div class="input-container">
+          <div>
+            <input
+              type="text"
+              v-model="location"
+              onfocus="this.placeholder = ''"
+              placeholder="Current Location"
+              class="input input1"
+            />
+          </div>
+          <div>
+            <input
+              type="text"
+              v-model="businessName"
+              onfocus="this.placeholder = ''"
+              placeholder="Business Name"
+              class="input input2"
+            />
+          </div>
+          <div>
+            <input
+              type="text"
+              onfocus="this.placeholder = ''"
+              v-model="category"
+              class="input input3"
+              placeholder="Category: Plumber, HVAC..."
+            />
+          </div>
+          <div>
+            <input type="submit" value="Find Business" class="input input4" />
+          </div>
         </div>
-        <div>
-          <input
-            type="text"
-            v-model="businessName"
-            class="input input2"
-            placeholder="Business name, Plumber, HVAC..."
-          />
-        </div>
-        <div>
-          <input
-            type="submit"
-            @click="search"
-            value="Find Business"
-            class="input input3"
-          />
-        </div>
-      </div>
+      </form>
     </div>
+
     <img src="@/assets/gold-striped-background-1.jpg" class="img-border" />
   </div>
 </template>
@@ -48,13 +57,24 @@ export default {
     return {
       location: "",
       businessName: "",
+      category: "",
       bg1,
       bg2,
     };
   },
+
   methods: {
-    search: () => {
-      alert("button clicked");
+    onSubmit(evt) {
+      evt.preventDefault();
+      this.$router.push(
+        "/companys?location=" +
+          this.location +
+          "&company=" +
+          this.businessName +
+          "&category=" +
+          this.category +
+          ""
+      );
     },
   },
 };
@@ -63,13 +83,18 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 
 <style scoped>
+.data {
+  color: white;
+  font-size: 20px;
+}
+
 .form.main-container {
   padding: 15vw 0vw 0vw;
   width: 100%;
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
-    font-family: "Playfair Display", serif;
+  font-family: "Playfair Display", serif;
 }
 
 .bg {
@@ -108,12 +133,13 @@ export default {
 }
 
 .input1,
-.input2 {
+.input2,
+.input3 {
   background-color: #ffffffc9;
   margin-bottom: 20px;
 }
 
-.input3 {
+.input4 {
   box-shadow: 0px 1px 0px 0px #fff6af;
   background: linear-gradient(to bottom, #ffec64 5%, #ffab23 100%);
   background-color: #ffec64;
@@ -127,7 +153,7 @@ export default {
   text-shadow: 0px 1px 0px #ffee66;
 }
 
-.input3:hover {
+.input4:hover {
   background: linear-gradient(to bottom, #ffab23 5%, #ffec64 100%);
   background-color: #ffab23;
 }
@@ -137,7 +163,7 @@ export default {
 }
 
 @media only screen and (device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 3) {
-  .input3 {
+  .input4 {
     box-shadow: 0px 1px 0px 0px #fff6af;
     background: linear-gradient(to bottom, #ffec64 5%, #ffab23 100%);
     background-color: #ffec64;
@@ -152,7 +178,7 @@ export default {
     text-shadow: 0px 1px 0px #ffee66;
   }
 
-  .input3:hover {
+  .input4:hover {
     background: linear-gradient(to bottom, #ffab23 5%, #ffec64 100%);
     background-color: #ffab23;
   }
@@ -163,7 +189,7 @@ export default {
     padding: 10vw 0vw 0vw;
   }
 
-  .input-container {
+  .Noinput-container {
     display: flex;
     justify-content: space-around;
     padding: 0 0 5vw;
@@ -187,9 +213,8 @@ export default {
     margin-bottom: 5vw;
   }
 
-  .input {
+  .NOinput {
     width: 30vw;
-
     padding: 30px;
   }
 }
@@ -209,22 +234,33 @@ export default {
     background-position: 0px 130px;
   }
 
-  .input-container {
+  .NOinput-container {
     width: 90%;
     margin: auto;
   }
-  .input {
+  .NOinput {
     width: 28vw;
   }
 }
 
 @media screen and (min-width: 1200px) {
-  .input-container {
+  .Noinput-container {
     width: 75%;
     margin: auto;
   }
+  .input-container {
+    width: 80%;
+    margin: auto;
+    display: flex;
+    justify-content: space-evenly;
+    padding: 0 0 5vw;
+  }
 
   .input {
+    width: 22vw;
+    margin: 0 10px;
+  }
+  .NOinput {
     width: 22vw;
   }
   .heading h1 {
@@ -237,7 +273,7 @@ export default {
     margin-bottom: 3vw;
   }
   .form.main-container img.img-border {
-  box-shadow: 7px 15px #cecece;
-}
+    box-shadow: 7px 15px #cecece;
+  }
 }
 </style>

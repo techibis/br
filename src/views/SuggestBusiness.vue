@@ -8,12 +8,7 @@
           >click here instead to list your business for free</a
         >
       </h2>
-      <p>
-        <a href="/reviewer-signup">Sign Up</a> or
-        <a href="/reviewer-login">Login </a> first to track your suggested
-        business
-      </p>
-      <AddBusiness source="Suggetion"></AddBusiness>
+      <AddBusiness source="1"></AddBusiness>
     </div>
   </div>
 </template>
