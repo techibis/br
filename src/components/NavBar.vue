@@ -64,8 +64,33 @@
               </li>
             </ul>
           </li>
-          <li>
+          <li v-if="display">
             <router-link to="/login-signup">Login/Sign Up</router-link>
+          </li>
+
+          <li v-if="hide">
+            <router-link to="">
+              Account
+              <i class="icon ion-md-arrow-dropdown"></i>
+            </router-link>
+            <ul class="sub-menu account">
+              <li v-if="admin">
+                <router-link to="/vue-admin"
+                  >Profile</router-link
+                >
+              </li>
+              <li v-if="business">
+                <router-link to="/bdashboard">Profile</router-link>
+              </li>
+              <li v-if="reviewer">
+                <router-link to="/rdashboard"
+                  >Profile</router-link
+                >
+              </li>
+              <li @click="logout">
+                <router-link to="">Logout</router-link>
+              </li>
+            </ul>
           </li>
         </ul>
       </nav>
@@ -77,10 +102,41 @@
 <script>
 export default {
   name: "NavBar",
+  data() {
+    return {
+      display: true,
+      hide: false,
+      admin:false,
+      business:false,
+      reviewer:false,
+    };
+  },
+
+  created() {
+    if (this.$session.exists()) {
+      this.display = false;
+      this.hide = true;
+    }
+    if(this.$session.get("type") === "A"){
+      this.admin=true;
+    }
+    if(this.$session.get("type") === "B"){
+      this.business=true;
+    }
+    if(this.$session.get("type") === "R"){
+      this.reviewer=true;
+    }
+
+  },
+
   methods: {
-    show: function() {
+    show() {
       const selectElement = (element) => document.querySelector(element);
       selectElement("nav").classList.toggle("active");
+    },
+    logout() {
+      this.$session.destroy();
+      this.$router.go("/");
     },
   },
 };
@@ -224,6 +280,7 @@ nav.active .nav-list {
   text-align: left;
 }
 
+
 @media screen and (min-width: 768px) {
   nav {
     height: 5vh;
@@ -263,6 +320,9 @@ nav.active .nav-list {
     border: 3px solid transparent;
     border-top: 3px solid #f6d185;
     background-color: #191919d1;
+  }
+  .sub-menu.account {
+    width: 13vw;
   }
 
   ul.sub-menu li a {
@@ -307,6 +367,11 @@ nav.active .nav-list {
   }
   .sub-menu {
     width: 17vw;
+  }
+
+  .sub-menu.account{
+
+    width:10vw;
   }
 
   ul.sub-menu li a {

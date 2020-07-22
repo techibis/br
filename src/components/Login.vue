@@ -34,8 +34,6 @@ Vue.use(BootstrapVue);
 
 var md5 = require("md5");
 
-import VueSession from "vue-session";
-Vue.use(VueSession);
 
 import getUserQuery from "../query/login.js";
 
@@ -55,7 +53,7 @@ export default {
       variables() {
         return {
           email: this.email,
-          password: this.password,
+          password: md5(this.password),
         };
       },
       skip() {
@@ -75,7 +73,7 @@ export default {
 
   methods: {
     async onSubmit() {
-      this.password = md5(this.password);
+      // this.password = md5(this.password);
       this.$apollo.queries.user.skip = false;
       await this.$apollo.queries.user.refetch();
       this.login();
@@ -88,7 +86,6 @@ export default {
         this.$session.set("type", this.user.type);
         this.$session.set("fname", this.user.fname);
         this.$session.set("lname", this.user.lname);
-        console.log(this.user.type);
 
         if (this.user.email == this.email && this.user.type == "A") {
           this.$router.push("/vue-admin");

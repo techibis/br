@@ -129,15 +129,12 @@ export default {
     },
 
     signup() {
-      this.password = md5(this.password);
-      this.passwordCheck = md5(this.passwordCheck);
-
       if (this.password === this.passwordCheck) {
         this.$apollo.mutate({
           mutation: addUserMutation,
           variables: {
             email: this.email,
-            password: this.password,
+            password: md5(this.password),
             type: this.type,
             fname: this.fname,
             lname: this.lname,

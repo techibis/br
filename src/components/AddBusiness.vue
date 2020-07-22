@@ -105,11 +105,12 @@ import Vue from "vue";
 import { BootstrapVue } from "bootstrap-vue";
 import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap-vue/dist/bootstrap-vue.css";
+Vue.use(BootstrapVue);
+
 import VueRecaptcha from "vue-recaptcha";
 
 import addBusinessMutation from "../query/addBusiness.js";
 
-Vue.use(BootstrapVue);
 
 export default {
   components: { VueRecaptcha },
@@ -129,8 +130,7 @@ export default {
       website: "",
       phone: "",
       logo: null,
-      file: null,
-      image: null,
+      loginid: null,
       suggested: props.source,
       favorite: 0,
       approved: 0,
@@ -981,15 +981,24 @@ export default {
     };
   },
 
+  created() {
+    // checking if session exist
+    if (this.$session.exists() && this.$session.get("type") === "B") {
+      this.loginid = this.$session.get("loginid");
+    }
+      else{
+      this.loginid = 0;
+    }
+  },
+
   methods: {
     onSubmit() {
       if (this.logo !== null) {
         this.logo = this.logo.name;
       }
-      console.log(this.logo);
+
       this.suggested = this.suggested === "1" ? 1 : 0;
-      console.log(this.suggested);
-      console.log(typeof this.suggested);
+
 
       this.$apollo.mutate({
         // Query
@@ -1009,6 +1018,7 @@ export default {
           website: this.website,
           phone: this.phone,
           logo: this.logo,
+          loginid: this.loginid,
           suggested: this.suggested,
           favorite: this.favorite,
           approved: this.approved,

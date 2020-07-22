@@ -2,7 +2,6 @@
   <div class="dashboard">
     <div class="container">
       <h1>Welcome {{ adminFName }} {{ adminLName }}</h1>
-      <button class="btn logout" @click="logout">Logout</button>
       <hr />
       <div v-if="allCompanys">
         <div v-if="allCompanys.length !== 0">
@@ -142,11 +141,10 @@ import Vue from "vue";
 import { BootstrapVue } from "bootstrap-vue";
 import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap-vue/dist/bootstrap-vue.css";
-import VueSession from "vue-session";
-Vue.use(VueSession);
 Vue.use(BootstrapVue);
 
 import getAllCompanysQuery from "../query/getAllBusiness.js";
+
 
 export default {
   name: "AdminDashboard",
@@ -158,11 +156,14 @@ export default {
     };
   },
 
-  beforeCreate: function() {
+  beforeCreate(){
     if (!this.$session.exists()) {
       this.$router.push("/");
     }
+    this.$router.go(1)
   },
+
+
 
   apollo: {
     allCompanys: {

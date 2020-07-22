@@ -1,100 +1,168 @@
 <template>
   <div class="results main-container">
-  <a :href="'/vue-admin'"><button class="back">Back</button></a>
-    <div v-if="company" class="apollo">
-      <h1>{{ company.name }}</h1>
-      <div class="data">
-        <div v-if="company.owner !== null ">
-          <div v-if="company.owner.type === 'B'">
-            <h1>
-              Business Owner : {{ company.owner.fname }}
-              {{ company.owner.lname }}
-            </h1>
-          </div>
-        </div>
-        <div>
-          <p>id:{{ cid }}</p>
-          <p>Contact Person: {{ company.fname }} {{ company.lname }}</p>
-          <p>Address1: {{ company.address1 }}</p>
-          <p v-if="company.address2.length !== 0">
-            Address2: {{ company.address2 }}
-          </p>
-          <p>City: {{ company.city }}</p>
-          <p>State: {{ company.state }}</p>
-          <p>Zip: {{ company.zip }}</p>
-          <p>Categoryid: {{ company.categoryid }}</p>
-          <p>Description: {{ company.descr }}</p>
-          <p>Website: {{ company.website }}</p>
-          <p>Phone: {{ company.phone }}</p>
-          <p>Suggested:{{ company.suggested }}</p>
-          <p>Favorite:{{ company.favorite }}</p>
-          <p>Approved:{{ company.approved }}</p>
-        </div>
-        <div v-if="company.hours !== null">
-          <h1>Business Hours :</h1>
-          <p>
-            Monday: {{ company.hours.monstart }} - {{ company.hours.monend }}
-          </p>
-          <p>
-            Tesday : {{ company.hours.tuestart }} - {{ company.hours.tueend }}
-          </p>
-          <p>
-            Wednesday : {{ company.hours.wedstart }} -
-            {{ company.hours.wedend }}
-          </p>
-          <p>
-            Thursday : {{ company.hours.thustart }} -
-            {{ company.hours.thuend }}
-          </p>
-          <p>
-            Fridayday : {{ company.hours.fristart }} -
-            {{ company.hours.friend }}
-          </p>
-          <p>
-            Satday : {{ company.hours.satstart }} - {{ company.hours.satend }}
-          </p>
-          <p>
-            Sunday : {{ company.hours.sunstart }} - {{ company.hours.sunend }}
-          </p>
-        </div>
+    <div class="updateBusiness">
+      <a :href="'/vue-admin'"><button class="back">Back</button></a>
+      <br />
 
-        <div v-if="company.ratings !== null">
-          <h1>Ratings</h1>
-          <p>Rating : {{ company.ratings.rating }}</p>
-          <p>Total Reviews : {{ company.ratings.revcount }}</p>
-          <p>Total Ranking: {{ company.ratings.ranking }}</p>
-        </div>
+      <p v-if="show" class="green">Data Updated Successfully</p>
+      <div v-if="company">
+        <b-form @submit.prevent="onSubmit">
+          <b-form-group
+            id="input-group-1"
+            label="Business Name *"
+            label-for="input-1"
+          >
+            <b-form-input
+              id="input-1"
+              v-model="company.name"
+              required
+            ></b-form-input>
+          </b-form-group>
 
-        <div v-if="company.reviews.length !== 0">
-          <h1>Reviews</h1>
-          <div v-for="review in company.reviews" :key="review.rid">
-            <div v-if="review.active === 1">
-              <p>Quality : {{ review.quality }}</p>
-              <p>Value : {{ review.value }}</p>
-              <p>Timeliness : {{ review.timeliness }}</p>
-              <p>Experience : {{ review.experience }}</p>
-              <p>Satisfaction : {{ review.satisfaction }}</p>
-              <p>Comments : {{ review.comments }}</p>
-              <p>Reviewer : {{ review.fname }} {{ review.lname }}</p>
-              <p>
-                Reviewer Location : {{ review.reviewer.city }},
-                {{ review.reviewer.state }}
-              </p>
+          <div class="row">
+            <div class="form-group col-md-6">
+              <b-form-group
+                id="input-group-2"
+                label="City*"
+                label-for="input-2"
+              >
+                <b-form-input
+                  id="input-2"
+                  v-model="company.city"
+                  required
+                ></b-form-input>
+              </b-form-group>
             </div>
-            <br />
+            <div class="form-group col-md-6">
+              <b-form-group
+                id="input-group-3"
+                label="State *"
+                label-for="input-3"
+              >
+                <b-form-input
+                  id="input-3"
+                  v-model="company.state"
+                  required
+                ></b-form-input>
+              </b-form-group>
+            </div>
           </div>
-        </div>
-      </div>
 
+          <b-form-group
+            id="input-group-4"
+            label="Website *"
+            label-for="input-4"
+          >
+            <b-form-input
+              id="input-4"
+              v-model="company.website"
+              required
+            ></b-form-input>
+          </b-form-group>
+
+          <b-form-group
+            id="input-group-5"
+            label="Contact First Name"
+            label-for="input-5"
+          >
+            <b-form-input id="input-5" v-model="company.fname"> </b-form-input>
+          </b-form-group>
+
+          <b-form-group
+            id="input-group-6"
+            label="Contact Last Name"
+            label-for="input-6"
+          >
+            <b-form-input id="input-6" v-model="company.lname"> </b-form-input>
+          </b-form-group>
+
+          <b-form-group id="input-group-7" label="Phone" label-for="input-7">
+            <b-form-input id="input-7" v-model="company.phone"> </b-form-input>
+          </b-form-group>
+
+          <b-form-group
+            id="input-group-8"
+            label="Postal Code"
+            label-for="input-8"
+          >
+            <b-form-input id="input-8" v-model="company.zip"></b-form-input>
+          </b-form-group>
+          <b-form-group id="input-group-9" label="Address" label-for="input-9">
+            <b-form-input
+              id="input-9"
+              v-model="company.address1"
+            ></b-form-input>
+          </b-form-group>
+
+          <b-form-group
+            id="input-group-10"
+            label="Address 2"
+            label-for="input-10"
+          >
+            <b-form-input
+              id="input-10"
+              v-model="company.address2"
+            ></b-form-input>
+          </b-form-group>
+          <b-form-group
+            id="input-group-11"
+            label="Suggested"
+            label-for="input-11"
+          >
+            <b-form-input
+              id="input-11"
+              v-model="company.suggested"
+            ></b-form-input>
+          </b-form-group>
+          <b-form-group
+            id="input-group-12"
+            label="Favorite"
+            label-for="input-12"
+          >
+            <b-form-input
+              id="input-12"
+              v-model="company.favorite"
+            ></b-form-input>
+          </b-form-group>
+          <b-form-group
+            id="input-group-13"
+            label="Approved"
+            label-for="input-13"
+          >
+            <b-form-input
+              id="input-13"
+              v-model="company.approved"
+            ></b-form-input>
+          </b-form-group>
+
+          <b-form-group
+            id="textarea-1"
+            label="Business Description"
+            label-for="textarea"
+          >
+            <b-form-textarea
+              id="textarea"
+              v-model="company.descr"
+            ></b-form-textarea>
+          </b-form-group>
+
+          <b-button type="submit" class="submitButton">Submit</b-button>
+        </b-form>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-import getCompanyQuery from "../query/business.js";
 import Vue from "vue";
-import VueSession from "vue-session";
-Vue.use(VueSession);
+import { BootstrapVue } from "bootstrap-vue";
+import "bootstrap/dist/css/bootstrap.css";
+import "bootstrap-vue/dist/bootstrap-vue.css";
+Vue.use(BootstrapVue);
+
+import getCompanyQuery from "../query/business.js";
+import updateBusinessMutation from "../query/updateBusiness.js";
+
 
 
 export default {
@@ -103,16 +171,50 @@ export default {
   data() {
     return {
       cid: "",
-      company:null,
+      show: false,
     };
   },
+
   beforeCreate: function() {
-    if (!this.$session.exists() && (this.$session.get("type") !== "A")) {
+    if (!this.$session.exists() && this.$session.get("type") !== "A") {
       this.$router.push("/");
     }
+    this.name = this.company.name;
   },
+
   created() {
     this.cid = this.$route.params.cid;
+  },
+
+  methods: {
+    async onSubmit() {
+      await this.$apollo.mutate({
+        // Query
+        mutation: updateBusinessMutation,
+        variables: {
+          cid: this.cid,
+          name: this.company.name,
+          fname: this.company.fname,
+          lname: this.company.lname,
+          address1: this.company.address1,
+          address2: this.company.address2,
+          city: this.company.city,
+          state: this.company.state,
+          zip: this.company.zip,
+          categoryid: this.company.categoryid,
+          descr: this.company.descr,
+          website: this.company.website,
+          phone: this.company.phone,
+          suggested: parseInt(this.company.suggested),
+          favorite: parseInt(this.company.favorite),
+          approved: parseInt(this.company.approved),
+        },
+        update: (cache, { data: { updateBusiness } }) => {
+          console.log(updateBusiness);
+        },
+      });
+      this.show = true;
+    },
   },
 
   apollo: {
@@ -134,27 +236,14 @@ export default {
 .results {
   padding: 8vw 5vw;
   background-color: #eff0f0;
-}
-
-.data {
-  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
-  padding: 5vw 3vw;
-  border-radius: 5px;
   width: 90%;
-  margin: 30px auto;
+  margin: 10% auto;
 }
-
-.data > div {
-  margin-top: 30px;
+.green {
+  color: green;
 }
-
-.data p {
-  font-size: 16px;
-  line-height: 2;
-  text-align: left;
-}
-
-.back {
+.back,
+.submitButton {
   margin: 20px 0;
   box-shadow: 0px 1px 0px 0px #fff6af;
   background: linear-gradient(to bottom, #ffec64 5%, #ffab23 100%);
@@ -172,17 +261,106 @@ export default {
   text-shadow: 0px 1px 0px #ffee66;
 }
 
-.back:hover {
+.back:hover,
+.submitButton:hover {
   background: linear-gradient(to bottom, #ffab23 5%, #ffec64 100%);
   background-color: #ffab23;
 }
-.back:active {
+.back:active,
+.submitButton:active {
   position: relative;
 }
 
+.updateBusiness {
+  text-align: left;
+}
+
+.form-group.col-md-6 {
+  margin-bottom: 0;
+}
+
+label {
+  font-size: 4vw;
+  font-weight: bold;
+}
+
+label[for="file"],
+#textarea {
+  font-size: 4vw;
+  border-color: #f6d185;
+}
+
+.form-group input {
+  height: 10vw;
+  padding: 2px 10px;
+  border: 1px solid #f6d185;
+  font-size: 3.5vw;
+}
+
+@media screen and (min-width: 640px) {
+  .results {
+    width: 75%;
+    margin: 5% auto;
+  }
+  label {
+    font-size: 2.2vw;
+  }
+  .form-group input {
+    height: 3vw;
+    font-size: 2vw;
+  }
+  label[for="file"],
+  #textarea {
+    font-size: 2vw;
+  }
+  .form-group {
+    margin-bottom: 2rem;
+  }
+  .submitButton {
+    padding: 6px 60px;
+  }
+}
+
 @media screen and (min-width: 999px) {
-  .data {
-    width: 60%;
+  label {
+    font-size: 1.8vw;
+  }
+  .form-group input {
+    height: 4vw;
+    font-size: 1.5vw;
+  }
+  label[for="file"],
+  #textarea {
+    font-size: 1.5vw;
+  }
+}
+
+@media screen and (min-width: 999px) {
+  label {
+    font-size: 1.2vw;
+  }
+  .form-group input {
+    height: 3.5vw;
+    font-size: 1.1vw;
+  }
+
+  label[for="file"],
+  #textarea {
+    font-size: 1.2vw;
+  }
+}
+
+@media screen and (min-width: 1200px) {
+  label {
+    font-size: 3vw;
+  }
+  .form-group input {
+    height: 2.5vw;
+    font-size: 0.8vw;
+  }
+  label[for="file"],
+  #textarea {
+    font-size: 1vw;
   }
 }
 </style>

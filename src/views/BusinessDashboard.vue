@@ -1,6 +1,5 @@
 <template>
   <div class="dashboard">
-    <button class="btn logout" @click="logout">Logout</button>
     <h1>Welcome {{ this.ownerFName }} {{ this.ownerLName }}</h1>
     <hr>
 
@@ -79,7 +78,7 @@
               <p>Comments : {{ review.comments }}</p>
               <p>date : {{ review.date }}</p>
               <p>Reviewer : {{ review.fname }} {{ review.lname }}</p>
-              <p>
+              <p v-if="review.reviewer !== null">
                 Reviewer Location : {{ review.reviewer.city }},
                 {{ review.reviewer.state }}
               </p>
@@ -94,9 +93,7 @@
 
 <script>
 import getCompanyByLoginIdQuery from "../query/getCompanyByLoginId.js";
-import Vue from "vue";
-import VueSession from "vue-session";
-Vue.use(VueSession);
+
 
 export default {
   name: "BusinessDashboard",
@@ -113,6 +110,7 @@ export default {
       this.$router.push("/");
     }
   },
+
 
   apollo: {
     ownerCompany: {

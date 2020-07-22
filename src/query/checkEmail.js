@@ -9,3 +9,4 @@ const checkEmailQuery = gql`
 `;
 
 export default checkEmailQuery;
+
