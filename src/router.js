@@ -18,19 +18,34 @@ export default new Router({
       component: Home,
     },
     {
-      path: "/companys",
+      path: "/companys/:category",
       name: "Results",
       component: () => import("./views/Results.vue"),
     },
     {
-      path: "/:company/:cid",
+      path: "/companys/:company/:cid",
       name: "SingleResult",
       component: () => import("./views/SingleResult.vue"),
+    },
+    {
+      path: "/company/edit/:company/:cid",
+      name: "EditCity",
+      component: () => import("./components/EditCity.vue"),
     },
     {
       path: "/vue-admin/edit/:company/:cid",
       name: "ApproveBusiness",
       component: () => import("./views/ApproveBusiness.vue"),
+    },
+    {
+      path: "/bdashboard/edit/:company",
+      name: "EditBusiness",
+      component: () => import("./views/EditBusiness.vue"),
+    },
+    {
+      path: "/review-status/:rid",
+      name: "EditReview",
+      component: () => import("./views/EditReview.vue"),
     },
     {
       path: "/reviews/:company/:cid",

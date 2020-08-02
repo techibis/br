@@ -10,7 +10,8 @@ const getAllCompanysQuery = gql`
       address1
       address2
       city
-      state
+      lat
+      lon
       zip
       categoryid
       descr
@@ -23,6 +24,7 @@ const getAllCompanysQuery = gql`
       approved
       categoryname{
         name
+        short_name
       }
       hours {
         cid

@@ -101,6 +101,7 @@ export default {
     };
   },
 
+
   apollo: {
     checkEmail: {
       query: checkEmailQuery,

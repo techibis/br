@@ -9,36 +9,16 @@
         </p>
       </div>
       <form @submit="onSubmit">
-        <div class="input-container">
-          <div>
-            <input
-              type="text"
-              v-model="location"
-              onfocus="this.placeholder = ''"
-              placeholder="Current Location"
-              class="input input1"
-            />
+        <div class="input-container" id="input">
+          <div
+            id="autocomplete"
+            class="autocomplete-container location-input"
+          ></div>
+          <div v-if="allCategories">
+            <v-select v-model="item" :options="allCategories" placeholder="Business Name, Plumber, HVAC..."></v-select>
           </div>
           <div>
-            <input
-              type="text"
-              v-model="businessName"
-              onfocus="this.placeholder = ''"
-              placeholder="Business Name"
-              class="input input2"
-            />
-          </div>
-          <div>
-            <input
-              type="text"
-              onfocus="this.placeholder = ''"
-              v-model="category"
-              class="input input3"
-              placeholder="Category: Plumber, HVAC..."
-            />
-          </div>
-          <div>
-            <input type="submit" value="Find Business" class="input input4" />
+            <input type="submit" value="Find Business" class="input input1" />
           </div>
         </div>
       </form>
@@ -51,30 +31,63 @@
 <script>
 import bg1 from "@/assets/radial-gradient.jpg";
 import bg2 from "@/assets/phoenix-city-25.png";
+import getAllCategoriesQuery from "../query/allCategories.js";
+import { GeocoderAutocomplete } from "@geoapify/geocoder-autocomplete";
+
+import Vue from "vue";
+import vSelect from "vue-select";
+
+Vue.component("v-select", vSelect);
+
+import "vue-select/dist/vue-select.css";
+
 export default {
   name: "Form",
   data() {
     return {
-      location: "",
-      businessName: "",
+      lan: "",
+      lot: "",
       category: "",
+      item:"",
       bg1,
       bg2,
     };
   },
 
+  mounted() {
+    const autocomplete = new GeocoderAutocomplete(
+      document.getElementById("autocomplete"),
+      "f6f712c4b7c7422bad41c44ccebb7627",
+      {
+        /* Geocoder options */
+      }
+    );
+
+    autocomplete.on("select", (location) => {
+      this.lat = location.properties.lat;
+      this.lon = location.properties.lon;
+    });
+  },
+
   methods: {
     onSubmit(evt) {
       evt.preventDefault();
+      this.category= this.item.label;
       this.$router.push(
-        "/companys?location=" +
-          this.location +
-          "&company=" +
-          this.businessName +
-          "&category=" +
+        "/companys/" +
           this.category +
+          "?lat=" +
+          this.lat +
+          "&lon=" +
+          this.lon +
           ""
       );
+    },
+  },
+
+  apollo: {
+    allCategories: {
+      query: getAllCategoriesQuery,
     },
   },
 };
@@ -83,6 +96,19 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 
 <style scoped>
+@import "~@geoapify/geocoder-autocomplete/styles/minimal.css";
+
+/* autocomplete-container */
+
+.autocomplete-container {
+  position: relative;
+}
+
+.geoapify-close-button {
+  position: absolute;
+  right: 20px;
+}
+
 .data {
   color: white;
   font-size: 20px;
@@ -121,25 +147,39 @@ export default {
   padding: 0 0 15vw;
 }
 
-.input {
+.input1, .v-select{
   border-radius: 40px;
   padding: 20px;
   width: 75vw;
+  color: #cecece;
   border: transparent;
-  color: black;
   text-align: center;
   font-size: 1.8rem;
   outline: none;
 }
 
-.input1,
-.input2,
-.input3 {
-  background-color: #ffffffc9;
-  margin-bottom: 20px;
+.v-select{
+  padding: 18px 20px;
 }
 
-.input4 {
+.autocomplete-container  {
+  border-radius: 40px;
+  padding: 20px 0;
+  margin: auto;
+  width: 80vw;
+    color: #333333;
+  border: transparent;
+  text-align: center;
+  font-size: 1.8rem;
+  outline: none;
+}
+
+.v-select{
+  background-color: #ffffffc9;
+  margin: 20px auto;
+}
+
+.input1 {
   box-shadow: 0px 1px 0px 0px #fff6af;
   background: linear-gradient(to bottom, #ffec64 5%, #ffab23 100%);
   background-color: #ffec64;
@@ -153,7 +193,7 @@ export default {
   text-shadow: 0px 1px 0px #ffee66;
 }
 
-.input4:hover {
+.input1:hover {
   background: linear-gradient(to bottom, #ffab23 5%, #ffec64 100%);
   background-color: #ffab23;
 }
@@ -163,7 +203,7 @@ export default {
 }
 
 @media only screen and (device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 3) {
-  .input4 {
+  .input1 {
     box-shadow: 0px 1px 0px 0px #fff6af;
     background: linear-gradient(to bottom, #ffec64 5%, #ffab23 100%);
     background-color: #ffec64;
@@ -178,7 +218,7 @@ export default {
     text-shadow: 0px 1px 0px #ffee66;
   }
 
-  .input4:hover {
+  .input1:hover {
     background: linear-gradient(to bottom, #ffab23 5%, #ffec64 100%);
     background-color: #ffab23;
   }
@@ -187,12 +227,6 @@ export default {
 @media screen and (min-width: 640px) {
   .form.main-container {
     padding: 10vw 0vw 0vw;
-  }
-
-  .Noinput-container {
-    display: flex;
-    justify-content: space-around;
-    padding: 0 0 5vw;
   }
 
   .bg {
@@ -213,10 +247,6 @@ export default {
     margin-bottom: 5vw;
   }
 
-  .NOinput {
-    width: 30vw;
-    padding: 30px;
-  }
 }
 
 @media screen and (min-width: 768px) {
@@ -229,40 +259,53 @@ export default {
   }
 }
 
-@media screen and (min-width: 1024px) {
-  .bg {
-    background-position: 0px 130px;
-  }
-
-  .NOinput-container {
-    width: 90%;
-    margin: auto;
-  }
-  .NOinput {
-    width: 28vw;
-  }
-}
-
-@media screen and (min-width: 1200px) {
-  .Noinput-container {
-    width: 75%;
-    margin: auto;
-  }
+@media screen and (min-width: 899px) {
   .input-container {
-    width: 80%;
+    width: 92%;
     margin: auto;
     display: flex;
     justify-content: space-evenly;
     padding: 0 0 5vw;
   }
 
-  .input {
-    width: 22vw;
+  .input1, .v-select,
+  .autocomplete-container {
+    width: 30vw;
     margin: 0 10px;
   }
-  .NOinput {
-    width: 22vw;
+}
+
+@media screen and (min-width: 1024px) {
+  .bg {
+    background-position: 0px 130px;
   }
+
+  .input-container {
+    width: 90%;
+    margin: auto;
+  }
+  .input1, .v-select,
+  .autocomplete-container  {
+    width: 28vw;
+  }
+}
+
+@media screen and (min-width: 1200px) {
+  .input-container {
+    width: 75%;
+    margin: auto;
+  }
+
+    .input1, .v-select,
+  .autocomplete-container  {
+    width: 25vw;
+  }
+
+  .geoapify-autocomplete-input {
+    width: 100vw !important;
+    margin: 0;
+  }
+
   .heading h1 {
     font-size: 3vw;
     margin-bottom: 3vw;

@@ -19,7 +19,6 @@ import List from "../components/List.vue";
 import Badge from "../components/Badge.vue";
 import Video from "../components/Video.vue";
 
-
 export default {
   name: "Home",
   components: {
@@ -33,3 +32,5 @@ export default {
   },
 };
 </script>
+
+

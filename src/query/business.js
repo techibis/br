@@ -10,7 +10,9 @@ const getCompanyQuery = gql`
       address1
       address2
       city
-      state
+      lat
+      lon
+      distance
       zip
       categoryid
       descr
@@ -78,6 +80,10 @@ const getCompanyQuery = gql`
         fname
         lname
         active
+      }
+      categoryname {
+        catid
+        name
       }
     }
   }

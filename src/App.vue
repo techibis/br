@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <NavBar />
+    <NavBar :key="$route.fullPath"></NavBar>
     <router-view />
     <Footer />
   </div>
@@ -13,7 +13,6 @@ import Footer from "./components/Footer.vue";
 import Vue from "vue";
 import VueSession from "vue-session";
 Vue.use(VueSession);
-
 
 export default {
   name: "App",
@@ -36,7 +35,7 @@ export default {
 body {
   overflow-x: hidden;
   background-color: #191919;
-    font-family: "Playfair Display", serif;
+  font-family: "Playfair Display", serif;
 }
 
 html {
@@ -63,6 +62,15 @@ html {
   height: 20px;
   margin-bottom: -3px;
   width: 100%;
+}
+
+label[for="file"] {
+  border-color: #f6d185;
+}
+
+.vs__dropdown-toggle {
+  border: none;
+  padding: 0;
 }
 
 @media screen and (min-width: 640px) {
@@ -161,5 +169,4 @@ html {
     margin-bottom: 2vw;
   }
 }
-
 </style>

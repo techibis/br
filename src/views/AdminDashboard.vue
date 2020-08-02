@@ -17,7 +17,7 @@
                 <th scope="col">Status</th>
                 <th scope="col">Staff Favorite</th>
                 <th scope="col">Suggested</th>
-                <th scope="col">action</th>
+                <th scope="col">Action</th>
               </tr>
             </thead>
             <tbody>
@@ -25,10 +25,15 @@
                 <th scope="row">{{ company.cid }}</th>
                 <td>{{ company.name }}</td>
                 <td>{{ company.fname }} {{ company.lname }}</td>
-                <td>
+                <td v-if="company.address2 !== '' ">
                   {{ company.address1 }},{{ company.address2 }},{{
                     company.city
-                  }}, {{ company.state }}-{{ company.zip }}
+                  }} - {{ company.zip }}
+                </td>
+                <td v-else>
+                  {{ company.address1 }},{{
+                    company.city
+                  }} - {{ company.zip }}
                 </td>
                 <td>{{ company.website }}</td>
                 <td>{{ company.phone }}</td>
@@ -157,10 +162,9 @@ export default {
   },
 
   beforeCreate(){
-    if (!this.$session.exists()) {
+    if (!this.$session.exists()|| this.$session.get("type") !== "A") {
       this.$router.push("/");
     }
-    this.$router.go(1)
   },
 
 

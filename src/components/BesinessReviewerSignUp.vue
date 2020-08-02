@@ -18,6 +18,15 @@ export default {
   components: {
     LoginSignUpButtons,
   },
+
+  beforeCreate() {
+    // checking if session exist
+    if (this.$session.exists()) {
+      if (this.$session.get("type") === "A") this.$router.push("/vue-admin");
+      if (this.$session.get("type") === "B") this.$router.push("/bdashboard");
+      if (this.$session.get("type") === "R") this.$router.push("/rdashboard");
+    }
+  },
 };
 </script>
 
@@ -35,36 +44,35 @@ export default {
   padding: 50px 16px;
   width: 100%;
   margin: auto;
-    text-align:center;
+  text-align: center;
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
 }
 
 @media screen and (min-width: 640px) {
   .box-area {
-    padding:50px 25px;
+    padding: 50px 25px;
     width: 60%;
   }
   .loginSignUpButtons-container h1 {
     font-size: 3vw;
-    }
+  }
 }
 @media screen and (min-width: 999px) {
   .box-area {
-      padding: 50px;
+    padding: 50px;
     width: 65%;
   }
-      .loginSignUpButtons-container h1 {
+  .loginSignUpButtons-container h1 {
     font-size: 2.5vw;
-    }
+  }
 }
 @media screen and (min-width: 1350px) {
   .box-area {
-      padding: 100px;
+    padding: 100px;
     width: 50%;
   }
-    .loginSignUpButtons-container h1 {
+  .loginSignUpButtons-container h1 {
     font-size: 2vw;
-    }
+  }
 }
-
 </style>

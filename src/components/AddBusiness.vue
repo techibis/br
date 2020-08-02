@@ -1,80 +1,60 @@
 <template>
   <div class="addBusiness">
     <b-form @submit.prevent="onSubmit" v-if="show">
-      <b-form-group
-        id="input-group-1"
-        label="Business Name *"
-        label-for="input-1"
-      >
+      <b-form-group id="input-group-1" label="Business Name *" label-for="input-1">
         <b-form-input id="input-1" v-model="name" required></b-form-input>
       </b-form-group>
 
-      <div class="row">
+      <!-- <div class="row">
         <div class="form-group col-md-6">
-          <b-form-group id="input-group-2" label="City*" label-for="input-2">
+          <b-form-group id="input-group-2" label="City & State *" label-for="input-2">
             <b-form-input id="input-2" v-model="city" required></b-form-input>
           </b-form-group>
         </div>
-        <div class="form-group col-md-6">
-          <b-form-group id="input-group-3" label="State *" label-for="input-3">
-            <b-form-input id="input-3" v-model="state" required></b-form-input>
-          </b-form-group>
-        </div>
-      </div>
+      </div>-->
+      <label>City & State *</label>
+      <div id="autocomplete" class="autocomplete-container"></div>
+      <br />
 
-      <b-form-group id="input-group-4" label="Website *" label-for="input-4">
-        <b-form-input id="input-4" v-model="website" required></b-form-input>
+      <b-form-group id="input-group-3" label="Website *" label-for="input-3">
+        <b-form-input id="input-3" v-model="website" type="url" required></b-form-input>
       </b-form-group>
 
-      <b-form-group
-        id="input-group-5"
-        label="Contact First Name"
-        label-for="input-5"
-      >
-        <b-form-input id="input-5" v-model="fname"> </b-form-input>
+      <b-form-group id="input-group-4" label="Contact First Name" label-for="input-4">
+        <b-form-input id="input-4" v-model="fname"></b-form-input>
       </b-form-group>
 
-      <b-form-group
-        id="input-group-6"
-        label="Contact Last Name"
-        label-for="input-6"
-      >
-        <b-form-input id="input-6" v-model="lname"> </b-form-input>
+      <b-form-group id="input-group-5" label="Contact Last Name" label-for="input-5">
+        <b-form-input id="input-5" v-model="lname"></b-form-input>
       </b-form-group>
 
-      <b-form-group id="input-group-7" label="Phone" label-for="input-7">
-        <b-form-input id="input-7" v-model="phone"> </b-form-input>
+      <b-form-group id="input-group-6" label="Phone" label-for="input-6">
+        <b-form-input id="input-6" v-model="phone" type="tel"></b-form-input>
       </b-form-group>
 
-      <b-form-group id="input-group-8" label="Postal Code" label-for="input-8">
-        <b-form-input id="input-8" v-model="zip"></b-form-input>
+      <b-form-group id="input-group-7" label="Postal Code" label-for="input-7">
+        <b-form-input id="input-7" v-model="zip"></b-form-input>
       </b-form-group>
-      <b-form-group id="input-group-9" label="Address" label-for="input-9">
-        <b-form-input id="input-9" v-model="address1"></b-form-input>
-      </b-form-group>
-
-      <b-form-group id="input-group-10" label="Address 2" label-for="input-10">
-        <b-form-input id="input-10" v-model="address2"></b-form-input>
+      <b-form-group id="input-group-8" label="Address" label-for="input-8">
+        <b-form-input id="input-8" v-model="address1"></b-form-input>
       </b-form-group>
 
-      <b-form-group
-        id="input-group-11"
-        label="Category & Subcategories *"
-        label-for="input-11"
-      >
+      <b-form-group id="input-group-9" label="Address 2" label-for="input-9">
+        <b-form-input id="input-9" v-model="address2"></b-form-input>
+      </b-form-group>
+
+      <b-form-group id="input-group-10" label="Category & Subcategories *" label-for="input-10">
         <b-form-select v-model="categoryid" id="select">
-          <option disabled value="">Please select one Category</option>
-          <option v-for="cat in categories" :key="cat.id" :value="cat.id">{{
+          <option disabled value>Please select one Category</option>
+          <option v-for="cat in categories" :key="cat.id" :value="cat.id">
+            {{
             cat.value
-          }}</option>
+            }}
+          </option>
         </b-form-select>
       </b-form-group>
 
-      <b-form-group
-        id="textarea-1"
-        label="Business Description"
-        label-for="textarea"
-      >
+      <b-form-group id="textarea-1" label="Business Description" label-for="textarea">
         <b-form-textarea
           id="textarea"
           v-model="descr"
@@ -86,12 +66,12 @@
 
       <b-form-group label="Company Logo:" label-for="file">
         <b-form-file
-          v-model="logo"
+          v-model="file"
           id="file"
           placeholder="Choose a file or drop it here..."
           drop-placeholder="Drop file here..."
         ></b-form-file>
-        <div class="mt-3">Selected file: {{ logo ? logo.name : "" }}</div>
+        <div class="mt-3">Selected file: {{ file ? file.name : "" }}</div>
       </b-form-group>
 
       <vue-recaptcha sitekey="Your key here"></vue-recaptcha>
@@ -111,25 +91,31 @@ import VueRecaptcha from "vue-recaptcha";
 
 import addBusinessMutation from "../query/addBusiness.js";
 
+import axios from "axios";
+
+import { GeocoderAutocomplete } from "@geoapify/geocoder-autocomplete";
 
 export default {
   components: { VueRecaptcha },
   props: ["source"],
   data(props) {
     return {
+      cid: null,
       name: "",
       fname: "",
       lname: "",
       address1: "",
       address2: "",
       city: "",
-      state: "",
+      lat: "",
+      lon: "",
       zip: "",
       categoryid: null,
       descr: "",
       website: "",
       phone: "",
-      logo: null,
+      file: null,
+      logo: "",
       loginid: null,
       suggested: props.source,
       favorite: 0,
@@ -985,22 +971,40 @@ export default {
     // checking if session exist
     if (this.$session.exists() && this.$session.get("type") === "B") {
       this.loginid = this.$session.get("loginid");
-    }
-      else{
+    } else {
       this.loginid = 0;
     }
   },
 
+  mounted() {
+    const autocomplete = new GeocoderAutocomplete(
+      document.getElementById("autocomplete"),
+      "f6f712c4b7c7422bad41c44ccebb7627",
+      {
+        /* Geocoder options */
+      }
+    );
+
+    autocomplete.on("select", (location) => {
+      this.city = location.properties.address_line1;
+      this.lat = location.properties.lat;
+      this.lon = location.properties.lon;
+    });
+  },
+
   methods: {
-    onSubmit() {
-      if (this.logo !== null) {
-        this.logo = this.logo.name;
+    async onSubmit() {
+      if (this.file !== null) {
+        this.logo = this.file.name;
       }
 
       this.suggested = this.suggested === "1" ? 1 : 0;
 
+      console.log(this.city);
+      console.log(typeof this.lat);
+      console.log(typeof this.lon);
 
-      this.$apollo.mutate({
+      await this.$apollo.mutate({
         // Query
         mutation: addBusinessMutation,
         // Parameters
@@ -1011,7 +1015,8 @@ export default {
           address1: this.address1,
           address2: this.address2,
           city: this.city,
-          state: this.state,
+          lat: parseFloat(this.lat),
+          lon: parseFloat(this.lon),
           zip: this.zip,
           categoryid: this.categoryid,
           descr: this.descr,
@@ -1023,10 +1028,27 @@ export default {
           favorite: this.favorite,
           approved: this.approved,
         },
+
         update: (cache, { data: { addBusiness } }) => {
           console.log(addBusiness);
+          this.cid = addBusiness.cid;
         },
       });
+
+      // upload file to backend
+      if (this.file !== null) {
+        const formData = new FormData();
+        formData.append("file", this.file);
+
+        try {
+          await axios.post(
+            "http://localhost:4000/upload/" + this.cid,
+            formData
+          );
+        } catch (err) {
+          console.log(err);
+        }
+      }
       this.resetForm();
       this.show = false;
       this.$nextTick(() => {
@@ -1041,19 +1063,26 @@ export default {
       this.address1 = "";
       this.address2 = "";
       this.city = "";
-      this.state = "";
+      this.lat = "";
+      this.lon = "";
       this.zip = "";
       this.categoryid = "";
       this.descr = "";
       this.website = "";
       this.phone = "";
-      this.logo = null;
+      this.file = null;
     },
   },
 };
 </script>
 
 <style>
+@import "~@geoapify/geocoder-autocomplete/styles/minimal.css";
+
+.autocomplete-container {
+  position: relative;
+}
+
 .addBusiness {
   text-align: left;
 }

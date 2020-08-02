@@ -394,6 +394,7 @@ export default {
         } else {
           this.resetForm();
           this.exist = true;
+          this.show = false;
         }
       } else {
         this.submitReview();
@@ -463,6 +464,7 @@ export default {
         },
       });
       this.exist = false;
+      this.show = false;
       this.success1 = true;
     },
 
