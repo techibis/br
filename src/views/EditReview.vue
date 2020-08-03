@@ -1,9 +1,16 @@
 <template>
   <div class="results main-container">
     <div class="updateReview">
-      <a :href="'/bdashboard'">
-        <button class="back">Back</button>
-      </a>
+      <div v-if="this.type === 'A'">
+        <a :href="'/vue-admin'">
+          <button class="back">Back</button>
+        </a>
+      </div>
+      <div v-if="this.type === 'B'">
+        <a :href="'/bdashboard'">
+          <button class="back">Back</button>
+        </a>
+      </div>
       <br />
       <!-- storing value in varible to login in updated lifecycle hook to allow only authorized businessperson to see their company review -->
       <div v-if="review" :set="this.loginid = review.company.loginid">
@@ -22,8 +29,12 @@
           Reviewer Location : {{ review.reviewer.city }},
           {{ review.reviewer.state }}
         </p>
+        <p
+          v-if="review.reply !== null"
+        >Reply by Owner :{{ review.reply.comment }} - on {{ review.reply.date }}</p>
         <br />
         <hr />
+
         <h3>Update Status:</h3>
         <b-form @submit.prevent="hideReview">
           <p v-if="success" class="green">Review status updated</p>
@@ -34,12 +45,30 @@
                 label="Do you want to hide this review? "
                 label-for="input-1"
               >
-                <b-form-select id="review-input" v-model="review.active" :options=option></b-form-select>
+                <b-form-select id="review-input" v-model="review.active" :options="option"></b-form-select>
               </b-form-group>
             </div>
           </div>
           <b-button type="submit" class="submitButton">Hide Review</b-button>
         </b-form>
+        <br />
+        <div v-if="review.reply === null">
+        <hr />
+          <h3>Reply :</h3>
+          <b-form @submit.prevent="addReply">
+            <p v-if="replied" class="green">Comment has been added!</p>
+            <b-form-group id="textarea-1" label="Add Comment" label-for="textarea">
+              <b-form-textarea
+                id="textarea"
+                v-model="comment"
+                placeholder="Write a comment ..."
+                rows="3"
+                max-rows="16"
+              ></b-form-textarea>
+            </b-form-group>
+            <b-button type="submit" class="submitButton">Reply</b-button>
+          </b-form>
+        </div>
       </div>
     </div>
   </div>
@@ -54,6 +83,7 @@ import "bootstrap-vue/dist/bootstrap-vue.css";
 Vue.use(BootstrapVue);
 
 import updateReviewMutation from "../query/updateReview.js";
+import addReplyMutation from "../query/addReply.js";
 import getReviewQuery from "../query/getReview.js";
 
 export default {
@@ -65,16 +95,21 @@ export default {
       type: this.$session.get("type"),
       rid: this.$route.params.rid,
       active: 0,
+      comment:"",
       success: false,
-      option:[
-        {value:0 , text:"Yes"},
-        {value:1 , text:"No"}
-      ]
+      replied: false,
+      option: [
+        { value: 0, text: "Yes" },
+        { value: 1, text: "No" },
+      ],
     };
   },
 
   beforeCreate() {
-    if ((this.$session.get("type") !== "B") && (this.$session.get("type") !== "A")) {
+    if (
+      this.$session.get("type") !== "B" &&
+      this.$session.get("type") !== "A"
+    ) {
       this.$router.push("/");
     }
   },
@@ -82,7 +117,8 @@ export default {
   updated() {
     //allowing only business owner to access the page and edit the review
     if (
-      this.$session.get("loginid") !== this.loginid && this.$session.get("type") !== "A"
+      this.$session.get("loginid") !== this.loginid &&
+      this.$session.get("type") !== "A"
     ) {
       this.$router.push("/");
     }
@@ -99,9 +135,26 @@ export default {
         },
         update: (cache, { data: { updateReview } }) => {
           console.log(updateReview);
+          this.success = true;
         },
       });
-      this.success = true;
+    },
+
+    addReply() {
+      this.$apollo.mutate({
+        // Query
+        mutation: addReplyMutation,
+        variables: {
+          rid: this.rid,
+          comment: this.comment,
+          active: 1,
+        },
+        update: (cache, { data: { addReply } }) => {
+          console.log(addReply);
+          this.replied = true;
+        },
+      });
+      this.$router.go();
     },
   },
 

@@ -24,6 +24,11 @@ const getReviewerIdQuery = gql`
         email
         active
         date
+        reply{
+          rid
+          comment
+          date
+        }
         company{
           name
           fname
@@ -57,6 +62,11 @@ const getReviewerIdQuery = gql`
               lname
               city
               state
+            }
+            reply{
+              rid
+              comment
+              date
             }
           }
         }

@@ -72,6 +72,11 @@ const getCompanyQuery = gql`
           city
           state
         }
+        reply{
+          rid
+          comment
+          date
+        }
       }
       owner {
         loginid

@@ -21,9 +21,9 @@
           <p>Description: {{ ownerCompany.descr }}</p>
           <p>Website: {{ ownerCompany.website }}</p>
           <p>Phone: {{ ownerCompany.phone }}</p>
-          <p v-if="ownerCompany.favorite === '1'">Staff Favorite: Yes</p>
+          <p v-if="ownerCompany.favorite === 1 ">Staff Favorite: Yes</p>
           <p v-else>Staff Favorite: No</p>
-          <p v-if="ownerCompany.approved === '1'">Status : Appoved</p>
+          <p v-if="ownerCompany.approved === 1 ">Status : Appoved</p>
           <p v-else>Status : Pending</p>
         </div>
         <br />
@@ -172,7 +172,7 @@
           <br />
           <div v-for="review in ownerCompany.reviews" :key="review.rid">
             <a :href="'/review-status/' + review.rid" target="_blank">
-              <button class="btn btn-danger">Edit Review Status</button>
+              <button class="btn btn-danger">Reply / Edit Review Status</button>
             </a>
             <p>Review Id : {{ review.rid }}</p>
             <p>Quality : {{ review.quality }}</p>
@@ -188,6 +188,9 @@
             <p v-if="review.reviewer !== null">
               Reviewer Location : {{ review.reviewer.city }},
               {{ review.reviewer.state }}
+            </p>
+            <p v-if="review.reply !== null">
+              Reply by Owner : {{ review.reply.comment }} - on {{ review.reply.date }}
             </p>
             <hr />
             <br />
@@ -339,6 +342,7 @@ export default {
 .custom-control-label {
   font-size: 12px;
 }
+
 .btn-danger {
   float: right;
   box-shadow: 0px 1px 0px 0px #fff6af;

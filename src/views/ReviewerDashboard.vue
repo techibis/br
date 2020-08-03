@@ -194,7 +194,11 @@
                   >
                   </star-rating>
                 </div>
-                <p><b>Comments: </b>{{ review.comments }}  </p>on {{ review.date }}
+                <p><b>Comments: </b>{{ review.comments }} <b>on {{ review.date }}</b></p> 
+                
+                <p v-if="review.reply !== null">
+                  Owner Replied : {{ review.reply.comment }} <b> on {{ review.reply.date }}</b>
+                </p>
               </div>
             </div>
 <!-- checking if any other reviewer commented by checking the length of review array and also comparing with review id -->
@@ -203,13 +207,17 @@
             <!-- showing other comments from other reviewers  -->
               <div v-if="review.rid !== rev.rid">
                 <hr />
-                <p>{{rev.date}}</p>
-                <p>{{ rev.comments }}</p>
-                <span>- {{ rev.fname }} {{ rev.lname }}</span>
-                <span v-if="rev.reviewer !== null">
-                  - {{ rev.reviewer.city }} {{ rev.reviewer.state }}</span
-                >
                 
+                <p>Comment : {{ rev.comments }}
+                <span> By  {{ rev.fname }} {{ rev.lname }}</span>
+                <span v-if="rev.reviewer !== null">
+                  , {{ rev.reviewer.city }}, {{ rev.reviewer.state }}</span
+                >
+                <b> on {{rev.date}}</b>
+                </p>
+                <p v-if="rev.reply !== null">
+                 Owner Replied : {{ rev.reply.comment }} - on {{ rev.reply.date }}
+                </p>
               </div>
             </div>
           </div>

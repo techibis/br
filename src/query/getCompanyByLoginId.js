@@ -72,6 +72,11 @@ const getCompanyByLoginIdQuery = gql`
           city
           state
         }
+        reply{
+          rid
+          comment
+          date
+        }
       }
     }
   }

@@ -25,6 +25,11 @@ const getReviewQuery = gql`
         city
         state
       }
+      reply{
+        rid
+        comment
+        date
+      }
       company{
         cid
         loginid

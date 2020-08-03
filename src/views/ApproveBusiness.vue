@@ -180,7 +180,7 @@
           <br />
           <div v-for="review in company.reviews" :key="review.rid">
             <a :href="'/review-status/' + review.rid" target="_blank">
-              <button class="btn btn-danger">Edit Review Status</button>
+              <button class="btn btn-danger">Reply / Edit Review Status</button>
             </a>
             <p>Review Id : {{ review.rid }}</p>
             <p>Quality : {{ review.quality }}</p>
@@ -196,6 +196,9 @@
             <p v-if="review.reviewer !== null">
               Reviewer Location : {{ review.reviewer.city }},
               {{ review.reviewer.state }}
+            </p>
+            <p v-if="review.reply !== null">
+              Reply by Owner : {{ review.reply.comment }} - on {{ review.reply.date }}
             </p>
             <hr />
             <br />
