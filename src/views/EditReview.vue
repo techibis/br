@@ -31,7 +31,7 @@
         </p>
         <p
           v-if="review.reply !== null"
-        >Reply by Owner :{{ review.reply.comment }} - on {{ review.reply.date }}</p>
+        >{{ review.company.name }} wrote on {{ review.reply.date }} : {{ review.reply.comment }}</p>
         <br />
         <hr />
 
@@ -146,15 +146,15 @@ export default {
         mutation: addReplyMutation,
         variables: {
           rid: this.rid,
-          comment: this.comment,
+          comment: (this.comment).replace(/[^A-Z0-9,./?:@&$#!()-]/ig, " "),
           active: 1,
         },
         update: (cache, { data: { addReply } }) => {
           console.log(addReply);
           this.replied = true;
+          this.$router.go();
         },
       });
-      this.$router.go();
     },
   },
 

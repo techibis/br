@@ -3,99 +3,103 @@
     <h1>All Companys for: " {{ companyCat }} "</h1>
     <div v-if="category" class="apollo">
       <div class="data" v-for="company in category.companys" :key="company.cid">
-        <a :href="'/companys/' + company.short_name + '/' + company.cid">
-          <div class="result">
-            <div class="row main">
-              <div class="col-md-3 logo">
-                <img
-                  v-if="company.logo !== ''"
-                  :src="'http://localhost:4000/'+company.logo"
-                  class="logo"
-                />
-                <h1 class="letter" v-else :set="name= company.name.charAt(0)">{{name}}</h1>
-              </div>
-              <div class="col-md-6 company">
-                <h1>{{ company.name }}</h1>
-                <p :set="distance= parseInt(company.distance)">Distance : {{distance}} Mile(s)</p>
-                <span v-if="company.favorite === 0">
-                  {{
-                  company.categoryname.short_name
-                  }}
-                </span>
-                <button class="staff" v-if="company.favorite === 1">Staff Favorite</button>
-                <p>{{ company.descr }}</p>
+        <div class="result">
+          <div class="row main">
+            <div class="col-md-3 logo">
+              <img
+                v-if="company.logo !== ''"
+                :src="'http://165.22.34.223:4000/'+company.logo"
+                class="logo"
+              />
+              <h1 class="letter" v-else :set="name= company.name.charAt(0)">{{name}}</h1>
+            </div>
+            <div class="col-md-6 company">
+              <h1>{{ company.name }}</h1>
+              <p :set="distance= parseInt(company.distance)">Distance : {{distance}} Mile(s)</p>
+              <span v-if="company.favorite === 0">
+                {{
+                company.categoryname.short_name
+                }}
+              </span>
+              <button class="staff" v-if="company.favorite === 1">Staff Favorite</button>
+              <p>{{ company.descr }}</p>
+              <h4>
+                <b>Contact Person:</b>
+                {{ company.fname }}
+                {{ company.lname }}
+              </h4>
+              <h4 v-if="company.address2 !== ''">
+                <b>Address:</b>
+                {{ company.address1 }},{{
+                company.address2
+                }},{{ company.city }}, {{ company.state }}-{{ company.zip }}
+              </h4>
+              <h4 v-else>
+                <b>Address:</b>
+                {{ company.address1 }}, {{ company.city }},
+                {{ company.state }}-{{ company.zip }}
+              </h4>
+              <h4>
+                <b>Phone:</b>
+                {{ company.phone }}
+              </h4>
+              <h4>
+                <b>Website:</b>
+                {{ company.website }}
+              </h4>
+              <div v-if="company.ratings !== null">
                 <h4>
-                  <b>Contact Person:</b>
-                  {{ company.fname }}
-                  {{ company.lname }}
-                </h4>
-                <h4 v-if="company.address2 !== ''">
-                  <b>Address:</b>
-                  {{ company.address1 }},{{
-                  company.address2
-                  }},{{ company.city }}, {{ company.state }}-{{ company.zip }}
-                </h4>
-                <h4 v-else>
-                  <b>Address:</b>
-                  {{ company.address1 }}, {{ company.city }},
-                  {{ company.state }}-{{ company.zip }}
+                  <b>Ranking:</b>
+                  {{ company.ratings.ranking }}
                 </h4>
                 <h4>
-                  <b>Phone:</b>
-                  {{ company.phone }}
+                  <b>Total Reviews:</b>
+                  {{ company.ratings.revcount }}
                 </h4>
-                <h4>
-                  <b>Website:</b>
-                  {{ company.website }}
-                </h4>
-                <div v-if="company.ratings !== null">
-                  <h4>
-                    <b>Ranking:</b>
-                    {{ company.ratings.ranking }}
+                <div class="row">
+                  <h4 class="col-md-4">
+                    <b>Average Ratings :</b>
                   </h4>
-                  <h4>
-                    <b>Total Reviews:</b>
-                    {{ company.ratings.revcount }}
-                  </h4>
-                  <div class="row">
-                    <h4 class="col-md-4">
-                      <b>Average Ratings :</b>
-                    </h4>
 
-                    <star-rating
-                      :set="(rating = parseInt(company.ratings.rating))"
-                      v-model="rating"
-                      class="col-md-8 star"
-                      :increment="0.1"
-                      border-color="#f6d185"
-                      :border-width="1"
-                      inactive-color="#fff"
-                      active-color="#f6d185"
-                      :star-size="30"
-                      :read-only="true"
-                      :fixed-points="1"
-                      :round-start-rating="false"
-                    ></star-rating>
-                  </div>
+                  <star-rating
+                    :set="(rating = parseInt(company.ratings.rating))"
+                    v-model="rating"
+                    class="col-md-8 star"
+                    :increment="0.1"
+                    border-color="#f6d185"
+                    :border-width="1"
+                    inactive-color="#fff"
+                    active-color="#f6d185"
+                    :star-size="30"
+                    :read-only="true"
+                    :fixed-points="1"
+                    :round-start-rating="false"
+                  ></star-rating>
                 </div>
               </div>
-              <div class="col-md-3">
-                <div v-if="company.favorite === 1">
-                  <a :href="company.website" target="_blank">
-                    <button class="viewProfile">
-                      <i class="fa fa-external-link" aria-hidden="true"></i>
-                      <b>Visit</b> Website
-                    </button>
-                  </a>
-                  <a :href="'tel:' + company.phone" target="_blank">
-                    <button class="rateBusiness">
-                      <b>
-                        <i class="fa fa-phone" aria-hidden="true"></i> Call
-                      </b> Now
-                    </button>
-                  </a>
-                  <a
-                    :href="
+              <div v-if="company.favorite === 1">
+                <a  :href="'/companys/' + company.name + '/' + company.cid" target="_blank">
+                  View Profile & Reviews
+                </a>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div v-if="company.favorite === 1">
+                <a :href="company.website" target="_blank">
+                  <button class="viewProfile">
+                    <i class="fa fa-external-link" aria-hidden="true"></i>
+                    <b>Visit</b> Website
+                  </button>
+                </a>
+                <a :href="'tel:' + company.phone" target="_blank">
+                  <button class="rateBusiness">
+                    <b>
+                      <i class="fa fa-phone" aria-hidden="true"></i> Call
+                    </b> Now
+                  </button>
+                </a>
+                <a
+                  :href="
                       'http://maps.google.com/?q=' +
                         company.address1 +
                         ',' +
@@ -105,32 +109,31 @@
                         ',' +
                         company.zip
                     "
-                    target="_blank"
-                  >
-                    <i class="fa fa-map-marker" aria-hidden="true">
-                      <b>
-                        Get
-                        Direction
-                      </b>
-                    </i>
-                  </a>
-                </div>
-                <div v-if="company.favorite === 0">
-                  <a :href="'/companys/' + company.name + '/' + company.cid" target="_blank">
-                    <button class="viewProfile">
-                      <b>View Profile</b>
-                    </button>
-                  </a>
-                  <a :href="'/reviews/' + company.name + '/' + company.cid" target="_blank">
-                    <button class="rateBusiness">
-                      <b>Rate Business</b>
-                    </button>
-                  </a>
-                </div>
+                  target="_blank"
+                >
+                  <i class="fa fa-map-marker" aria-hidden="true">
+                    <b>
+                      Get
+                      Direction
+                    </b>
+                  </i>
+                </a>
+              </div>
+              <div v-if="company.favorite === 0">
+                <a :href="'/companys/' + company.name + '/' + company.cid" target="_blank">
+                  <button class="viewProfile">
+                    <b>View Profile</b>
+                  </button>
+                </a>
+                <a :href="'/reviews/' + company.name + '/' + company.cid" target="_blank">
+                  <button class="rateBusiness">
+                    <b>Rate Business</b>
+                  </button>
+                </a>
               </div>
             </div>
           </div>
-        </a>
+        </div>
       </div>
     </div>
   </div>
@@ -152,10 +155,10 @@ export default {
 
   data() {
     return {
-      // company: "",
       lat: "",
       lon: "",
       companyCat: "",
+
     };
   },
 
@@ -165,8 +168,6 @@ export default {
     let params = new URLSearchParams(uri);
     this.lat = params.get("lat");
     this.lon = params.get("lon");
-    // this.company = params.get("company");
-    // this.companyCat = params.get("category");
   },
 
   apollo: {

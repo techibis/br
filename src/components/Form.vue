@@ -8,14 +8,25 @@
           instantly view their latest ratings and reviews
         </p>
       </div>
-      <form @submit="onSubmit">
+      <form>
         <div class="input-container" id="input">
-          <div
-            id="autocomplete"
-            class="autocomplete-container location-input"
-          ></div>
-          <div v-if="allCategories">
-            <v-select v-model="item" :options="allCategories" placeholder="Business Name, Plumber, HVAC..."></v-select>
+          <div id="form">
+            <div id="autocomplete" class="autocomplete-container location-input"></div>
+          </div>
+          <div>
+            <v-select
+              v-model="com"
+              :options="allApprovedCompanys"
+              :placeholder="placeholder"
+              :disabled="disabled ===1"
+            ></v-select>
+          </div>
+          <div>
+            <v-select
+              v-model="cat"
+              :options="allCategories"
+              placeholder="Category: Plumber, Electrician..."
+            ></v-select>
           </div>
           <div>
             <input type="submit" value="Find Business" class="input input1" />
@@ -32,6 +43,7 @@
 import bg1 from "@/assets/radial-gradient.jpg";
 import bg2 from "@/assets/phoenix-city-25.png";
 import getAllCategoriesQuery from "../query/allCategories.js";
+import getAllApprovedCompanysQuery from "../query/getAllApprovedCompanys.js";
 import { GeocoderAutocomplete } from "@geoapify/geocoder-autocomplete";
 
 import Vue from "vue";
@@ -48,31 +60,105 @@ export default {
       lan: "",
       lot: "",
       category: "",
-      item:"",
+      cat: "",
+      com: "",
+      company: "",
+      cid: "",
       bg1,
       bg2,
+      autocomplete: null,
+      placeholder: "Please enable / select location",
+      location: null,
+      gettingLocation: false,
+      errorStr: null,
+      disabled: 1,
     };
   },
 
+  created() {
+    //do we support geolocation
+    if (!("geolocation" in navigator)) {
+      this.errorStr = "Geolocation is not available.";
+      return;
+    }
+
+    this.gettingLocation = true;
+    // get position
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        this.gettingLocation = false;
+        this.location = pos;
+        this.lat = pos.coords.latitude;
+        this.lon = pos.coords.longitude;
+        console.log(pos);
+        // enable company select if location available
+        if (this.lat !== undefined) {
+          this.refetchQuery();
+        }
+      },
+      (err) => {
+        this.gettingLocation = false;
+        this.errorStr = err.message;
+      }
+    );
+  },
+
   mounted() {
-    const autocomplete = new GeocoderAutocomplete(
+    this.autocomplete = new GeocoderAutocomplete(
       document.getElementById("autocomplete"),
       "f6f712c4b7c7422bad41c44ccebb7627",
       {
         /* Geocoder options */
       }
     );
+    document.getElementsByClassName(
+      "geoapify-autocomplete-input"
+    )[0].placeholder = "Current Location ";
 
-    autocomplete.on("select", (location) => {
-      this.lat = location.properties.lat;
-      this.lon = location.properties.lon;
+    this.autocomplete.on("select", (location) => {
+      if (location) {
+        this.lat = location.properties.lat;
+        this.lon = location.properties.lon;
+      }
+
+      // enable company select if location available
+      if (this.lat !== undefined) {
+        this.refetchQuery();
+      }
+      // if category is not undefined look for businesses by category name
+
+      this.category = this.cat.label;
+      if (this.category !== undefined) {
+        this.categorySelected();
+      }
     });
   },
 
+  updated() {
+    this.category = this.cat.label;
+    this.company = this.com.name;
+    this.cid = this.com.value;
+
+    // if location is not undefined
+    if (this.lat !== undefined && this.category !== undefined) {
+      // if category is not undefined look for businesses by category name
+      this.categorySelected();
+    }
+
+    // if company is not undefined look for business by company name
+    if (this.company !== undefined) {
+      this.companySelected();
+    }
+  },
+
   methods: {
-    onSubmit(evt) {
-      evt.preventDefault();
-      this.category= this.item.label;
+    refetchQuery() {
+      this.placeholder = "Business Name";
+      this.disabled = 0;
+      this.$apollo.queries.allApprovedCompanys.skip = false;
+      this.$apollo.queries.allApprovedCompanys.refetch();
+    },
+    categorySelected() {
       this.$router.push(
         "/companys/" +
           this.category +
@@ -83,11 +169,28 @@ export default {
           ""
       );
     },
+
+    companySelected() {
+      this.$router.push("/companys/" + this.company + "/" + this.cid + "");
+    },
   },
 
   apollo: {
     allCategories: {
       query: getAllCategoriesQuery,
+    },
+
+    allApprovedCompanys: {
+      query: getAllApprovedCompanysQuery,
+      variables() {
+        return {
+          lat: parseFloat(this.lat),
+          lon: parseFloat(this.lon),
+        };
+      },
+      skip() {
+        return this.skipQuery;
+      },
     },
   },
 };
@@ -99,6 +202,8 @@ export default {
 @import "~@geoapify/geocoder-autocomplete/styles/minimal.css";
 
 /* autocomplete-container */
+
+/* find some form input css for background color in App.vue */
 
 .autocomplete-container {
   position: relative;
@@ -147,7 +252,8 @@ export default {
   padding: 0 0 15vw;
 }
 
-.input1, .v-select{
+.input1,
+.v-select {
   border-radius: 40px;
   padding: 20px;
   width: 75vw;
@@ -158,23 +264,13 @@ export default {
   outline: none;
 }
 
-.v-select{
+.v-select {
   padding: 18px 20px;
 }
 
-.autocomplete-container  {
-  border-radius: 40px;
-  padding: 20px 0;
-  margin: auto;
-  width: 80vw;
-    color: #333333;
-  border: transparent;
-  text-align: center;
-  font-size: 1.8rem;
-  outline: none;
-}
+/* location input design on App.vue */
 
-.v-select{
+.v-select {
   background-color: #ffffffc9;
   margin: 20px auto;
 }
@@ -246,7 +342,6 @@ export default {
     font-size: 2.5vw;
     margin-bottom: 5vw;
   }
-
 }
 
 @media screen and (min-width: 768px) {
@@ -259,18 +354,18 @@ export default {
   }
 }
 
-@media screen and (min-width: 899px) {
+@media screen and (min-width: 999px) {
   .input-container {
-    width: 92%;
+    width: 95%;
     margin: auto;
     display: flex;
     justify-content: space-evenly;
     padding: 0 0 5vw;
   }
 
-  .input1, .v-select,
-  .autocomplete-container {
-    width: 30vw;
+  .input1,
+  .v-select{
+    width: 22vw;
     margin: 0 10px;
   }
 }
@@ -279,28 +374,9 @@ export default {
   .bg {
     background-position: 0px 130px;
   }
-
-  .input-container {
-    width: 90%;
-    margin: auto;
-  }
-  .input1, .v-select,
-  .autocomplete-container  {
-    width: 28vw;
-  }
 }
 
 @media screen and (min-width: 1200px) {
-  .input-container {
-    width: 75%;
-    margin: auto;
-  }
-
-    .input1, .v-select,
-  .autocomplete-container  {
-    width: 25vw;
-  }
-
   .geoapify-autocomplete-input {
     width: 100vw !important;
     margin: 0;

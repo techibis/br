@@ -197,7 +197,7 @@
                 <p><b>Comments: </b>{{ review.comments }} <b>on {{ review.date }}</b></p> 
                 
                 <p v-if="review.reply !== null">
-                  Owner Replied : {{ review.reply.comment }} <b> on {{ review.reply.date }}</b>
+                  {{ review.company.name }} wrote on {{ review.reply.date }} : {{ review.reply.comment }}
                 </p>
               </div>
             </div>
@@ -280,8 +280,8 @@ export default {
         mutation: updateLocationMutation,
         variables: {
           loginid: this.loginid,
-          city: this.reviewerId.city,
-          state: this.reviewerId.state,
+          city: (this.reviewerId.city).replace(/[^A-Z0-9,./?:@&$#!()-]/ig, " "),
+          state: (this.reviewerId.state).replace(/[^A-Z0-9,./?:@&$#!()-]/ig, " "),
         },
         update: (cache, { data: { updateLocation } }) => {
           console.log(updateLocation);

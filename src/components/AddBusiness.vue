@@ -13,7 +13,9 @@
         </div>
       </div>-->
       <label>City & State *</label>
-      <div id="autocomplete" class="autocomplete-container"></div>
+      <div id="city">
+        <div id="autocomplete" class="autocomplete-container"></div>
+      </div>
       <br />
 
       <b-form-group id="input-group-3" label="Website *" label-for="input-3">
@@ -986,10 +988,18 @@ export default {
     );
 
     autocomplete.on("select", (location) => {
-      this.city = location.properties.address_line1;
-      this.lat = location.properties.lat;
-      this.lon = location.properties.lon;
+      if (location) {
+        this.city = location.properties.address_line1;
+        this.lat = location.properties.lat;
+        this.lon = location.properties.lon;
+      }
     });
+
+    let input = document.getElementsByClassName(
+      "geoapify-autocomplete-input"
+    )[0];
+    input.placeholder = "";
+    input.required = true;
   },
 
   methods: {
@@ -1000,28 +1010,24 @@ export default {
 
       this.suggested = this.suggested === "1" ? 1 : 0;
 
-      console.log(this.city);
-      console.log(typeof this.lat);
-      console.log(typeof this.lon);
-
       await this.$apollo.mutate({
         // Query
         mutation: addBusinessMutation,
         // Parameters
         variables: {
-          name: this.name,
-          fname: this.fname,
-          lname: this.lname,
-          address1: this.address1,
-          address2: this.address2,
+          name: this.name.replace(/[^A-Z0-9,./?:@&$#!()-]/gi, " "),
+          fname: this.fname.replace(/[^A-Z0-9,./?:@&$#!()-]/gi, " "),
+          lname: this.lname.replace(/[^A-Z0-9,./?:@&$#!()-]/gi, " "),
+          address1: this.address1.replace(/[^A-Z0-9,./?:@&$#!()-]/gi, " "),
+          address2: this.address2.replace(/[^A-Z0-9,./?:@&$#!()-]/gi, " "),
           city: this.city,
           lat: parseFloat(this.lat),
           lon: parseFloat(this.lon),
-          zip: this.zip,
+          zip: this.zip.replace(/[^A-Z0-9]/gi, " "),
           categoryid: this.categoryid,
-          descr: this.descr,
-          website: this.website,
-          phone: this.phone,
+          descr: this.descr.replace(/[^A-Z0-9,./?:@&$#!()-]/gi, " "),
+          website: this.website.replace(/[^A-Z0-9,./?:@&$#!()-]/gi, " "),
+          phone: this.phone.replace(/[^A-Z0-9]/gi, " "),
           logo: this.logo,
           loginid: this.loginid,
           suggested: this.suggested,
@@ -1042,7 +1048,7 @@ export default {
 
         try {
           await axios.post(
-            "http://localhost:4000/upload/" + this.cid,
+            "http://165.22.34.223:4000/upload/" + this.cid,
             formData
           );
         } catch (err) {
@@ -1096,13 +1102,17 @@ label {
   font-weight: bold;
 }
 
-label[for="file"],
-#textarea {
+#city .geoapify-autocomplete-input {
+  width: 100%;
+}
+
+#city .geoapify-autocomplete-input #textarea {
   font-size: 4vw;
   border-color: #f6d185;
 }
 
 .form-group input,
+#city .geoapify-autocomplete-input,
 .custom-select {
   height: 10vw;
   padding: 2px 10px;
@@ -1141,11 +1151,11 @@ label[for="file"],
     font-size: 2.2vw;
   }
   .form-group input,
-  .custom-select {
+  .custom-select,
+  #city .geoapify-autocomplete-input {
     height: 6vw;
     font-size: 2vw;
   }
-  label[for="file"],
   #textarea {
     font-size: 2vw;
   }
@@ -1159,30 +1169,15 @@ label[for="file"],
 
 @media screen and (min-width: 999px) {
   label {
-    font-size: 1.8vw;
-  }
-  .form-group input,
-  .custom-select {
-    height: 4vw;
-    font-size: 1.5vw;
-  }
-  label[for="file"],
-  #textarea {
-    font-size: 1.5vw;
-  }
-}
-
-@media screen and (min-width: 999px) {
-  label {
     font-size: 1.2vw;
   }
   .form-group input,
-  .custom-select {
+  .custom-select,
+  #city .geoapify-autocomplete-input {
     height: 3.5vw;
     font-size: 1.1vw;
   }
 
-  label[for="file"],
   #textarea {
     font-size: 1.2vw;
   }
@@ -1192,12 +1187,14 @@ label[for="file"],
   label {
     font-size: 1vw;
   }
+
   .form-group input,
-  .custom-select {
+  .custom-select,
+  #city .geoapify-autocomplete-input {
     height: 2.5vw;
     font-size: 0.8vw;
   }
-  label[for="file"],
+
   #textarea {
     font-size: 1vw;
   }

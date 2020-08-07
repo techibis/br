@@ -15,9 +15,7 @@
           <p>id:{{ cid }}</p>
           <p>Contact Person: {{ company.fname }} {{ company.lname }}</p>
           <p>Address1: {{ company.address1 }}</p>
-          <p v-if="company.address2.length !== 0">
-            Address2: {{ company.address2 }}
-          </p>
+          <p v-if="company.address2.length !== 0">Address2: {{ company.address2 }}</p>
           <p>City: {{ company.city }}</p>
           <p>State: {{ company.state }}</p>
           <p>Zip: {{ company.zip }}</p>
@@ -31,28 +29,38 @@
         </div>
         <div v-if="company.hours !== null">
           <h1>Business Hours :</h1>
-          <p>
-            Monday: {{ company.hours.monstart }} - {{ company.hours.monend }}
+          <p
+            v-if="company.hours.monstart == 'Closed' || company.hours.monend == 'Closed' "
+          >Monday: Closed.</p>
+          <p v-else>Monday: {{ company.hours.monstart }} - {{ company.hours.monend }}</p>
+          <p
+            v-if="company.hours.tuestart=='Closed' || company.hours.tueend == 'Closed'"
+          >Tesday : Closed.</p>
+          <p v-else>Tesday : {{ company.hours.tuestart }} - {{ company.hours.tueend }}</p>
+          <p
+            v-if="company.hours.wedstart=='Closed' || company.hours.wedend == 'Closed'"
+          >Tesday : Closed.</p>
+          <p v-else>Wednesday : {{ company.hours.wedstart }} - {{ company.hours.wedend }}</p>
+          <p
+            v-if="company.hours.thustart=='Closed' || company.hours.thuend == 'Closed'"
+          >Tesday : Closed.</p>
+          <p v-else>Thursday : {{ company.hours.thustart }} - {{ company.hours.thuend }}</p>
+          <p
+            v-if="company.hours.fristart=='Closed' || company.hours.friend == 'Closed'"
+          >Tesday : Closed.</p>
+          <p v-else>
+            Fridayday : {{ company.hours.fristart }} - {{ company.hours.friend }}
           </p>
-          <p>
-            Tesday : {{ company.hours.tuestart }} - {{ company.hours.tueend }}
-          </p>
-          <p>
-            Wednesday : {{ company.hours.wedstart }} -
-            {{ company.hours.wedend }}
-          </p>
-          <p>
-            Thursday : {{ company.hours.thustart }} -
-            {{ company.hours.thuend }}
-          </p>
-          <p>
-            Fridayday : {{ company.hours.fristart }} -
-            {{ company.hours.friend }}
-          </p>
-          <p>
+          <p
+            v-if="company.hours.satstart=='Closed' || company.hours.satend == 'Closed'"
+          >Tesday : Closed.</p>
+          <p v-else>
             Satday : {{ company.hours.satstart }} - {{ company.hours.satend }}
           </p>
-          <p>
+          <p
+            v-if="company.hours.sunstart=='Closed' || company.hours.sunend == 'Closed'"
+          >Tesday : Closed.</p>
+          <p v-else>
             Sunday : {{ company.hours.sunstart }} - {{ company.hours.sunend }}
           </p>
         </div>
@@ -80,6 +88,9 @@
                 Reviewer Location : {{ review.reviewer.city }},
                 {{ review.reviewer.state }}
               </p>
+               <p v-if="review.reply !== null">
+               <strong>{{company.name}}</strong> wrote on {{ review.reply.date }} : {{ review.reply.comment }}
+            </p>
             </div>
             <br />
           </div>
@@ -108,15 +119,12 @@ export default {
     };
   },
 
-  // create() {
-  //   let url = window.location.href;
-  //   if (url.includes("%20")) {
-  //     url = url.replace(/%20/g, "-");
-  //     location.replace(url);
-  //   }
-  // },
-
   created() {
+    // let url = window.location.href;
+    // if (url.includes("%20")) {
+    //   url = url.replace(/%20/g, "-");
+    //   location.replace(url);
+    // }
     this.cid = this.$route.params.cid;
   },
 

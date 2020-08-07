@@ -2,18 +2,18 @@
   <div class="ratings main-container">
     <div v-if="company" class="apollo">
       <div class="data">
-        <p v-if="success" class="green">
-          Your review has been submitted successfully.
-        </p>
-        <p v-if="success1" class="green">
-          Your account has been submitted successfully. Please sign in.
-        </p>
+        <p v-if="success" class="green">Your review has been submitted successfully.</p>
+        <p
+          v-if="success1"
+          class="green"
+        >Your account has been submitted successfully. Please sign in.</p>
         <p>Please Rate:</p>
         <h1>{{ company }}</h1>
-        <span
-          >If you have an account, <a href="/reviewer-login">sign in</a> to
-          track your reviews.</span
-        >
+        <span>
+          If you have an account,
+          <a href="/reviewer-login">sign in</a> to
+          track your reviews.
+        </span>
         <hr style="margin-top:30px" />
         <div>
           <b-form @submit.prevent="onSubmit">
@@ -31,8 +31,7 @@
                 active-color="#f6d185"
                 :star-size="30"
                 :show-rating="false"
-              >
-              </star-rating>
+              ></star-rating>
               <p>{{ quality }}</p>
             </div>
             <hr />
@@ -49,8 +48,7 @@
                 active-color="#f6d185"
                 :star-size="30"
                 :show-rating="false"
-              >
-              </star-rating>
+              ></star-rating>
               <p>{{ value }}</p>
             </div>
             <hr />
@@ -67,8 +65,7 @@
                 active-color="#f6d185"
                 :star-size="30"
                 :show-rating="false"
-              >
-              </star-rating>
+              ></star-rating>
               <p>{{ timeliness }}</p>
             </div>
             <hr />
@@ -85,8 +82,7 @@
                 active-color="#f6d185"
                 :star-size="30"
                 :show-rating="false"
-              >
-              </star-rating>
+              ></star-rating>
               <p>{{ experience }}</p>
             </div>
             <hr />
@@ -103,8 +99,7 @@
                 active-color="#f6d185"
                 :star-size="30"
                 :show-rating="false"
-              >
-              </star-rating>
+              ></star-rating>
               <p>{{ satisfaction }}</p>
             </div>
             <hr />
@@ -123,64 +118,28 @@
                 :fixed-points="1"
                 :show-rating="false"
                 :round-start-rating="false"
-              >
-              </star-rating>
+              ></star-rating>
               <p>{{ overall }}</p>
             </div>
             <hr />
 
-            <b-form-group
-              id="textarea-1"
-              label="Comments *"
-              label-for="textarea"
-            >
-              <b-form-textarea
-                id="textarea"
-                v-model="comments"
-                rows="3"
-                max-rows="16"
-                required
-              ></b-form-textarea>
+            <b-form-group id="textarea-1" label="Comments *" label-for="textarea">
+              <b-form-textarea id="textarea" v-model="comments" rows="3" max-rows="16" required></b-form-textarea>
             </b-form-group>
-            <div class="row">
+            <div class="row" v-if="noAccount">
               <div class="form-group col-md-4">
-                <b-form-group
-                  id="input-group-1"
-                  label="First Name *"
-                  label-for="input-1"
-                >
-                  <b-form-input
-                    id="input-1"
-                    v-model="fname"
-                    required
-                  ></b-form-input>
+                <b-form-group id="input-group-1" label="First Name *" label-for="input-1">
+                  <b-form-input id="input-1" v-model="fname" required></b-form-input>
                 </b-form-group>
               </div>
               <div class="form-group col-md-4">
-                <b-form-group
-                  id="input-group-2"
-                  label="Last Name *"
-                  label-for="input-2"
-                >
-                  <b-form-input
-                    id="input-2"
-                    v-model="lname"
-                    required
-                  ></b-form-input>
+                <b-form-group id="input-group-2" label="Last Name *" label-for="input-2">
+                  <b-form-input id="input-2" v-model="lname" required></b-form-input>
                 </b-form-group>
               </div>
               <div class="form-group col-md-4">
-                <b-form-group
-                  id="input-group-3"
-                  label="Email *"
-                  label-for="input-3"
-                >
-                  <b-form-input
-                    id="input-3"
-                    v-model="email"
-                    type="email"
-                    required
-                  ></b-form-input>
+                <b-form-group id="input-group-3" label="Email *" label-for="input-3">
+                  <b-form-input id="input-3" v-model="email" type="email" required></b-form-input>
                 </b-form-group>
               </div>
             </div>
@@ -189,56 +148,33 @@
               name="checkbox-1"
               v-model="selected"
               required
-            >
-              I agree to the terms of service and privacy policy.
-            </b-form-checkbox>
-            <b-form-checkbox
-              id="checkbox-2"
-              v-model="checked"
-              name="checkbox-2"
-            >
-              Create an account for full control over my reviews.
-            </b-form-checkbox>
+            >I agree to the terms of service and privacy policy.</b-form-checkbox>
+            <div v-if="noAccount">
+              <b-form-checkbox
+                id="checkbox-2"
+                v-model="checked"
+                name="checkbox-2"
+              >Create an account for full control over my reviews.</b-form-checkbox>
+            </div>
+
             <br />
             <div class="row" v-if="checked">
               <div class="form-group col-md-6">
-                <b-form-group
-                  id="input-group-4"
-                  label="Password *"
-                  label-for="input-4"
-                >
-                  <b-form-input
-                    id="input-4"
-                    v-model="password"
-                    type="password"
-                    required
-                  ></b-form-input>
+                <b-form-group id="input-group-4" label="Password *" label-for="input-4">
+                  <b-form-input id="input-4" v-model="password" type="password" required></b-form-input>
                 </b-form-group>
               </div>
               <div class="form-group col-md-6">
-                <b-form-group
-                  id="input-group-5"
-                  label="Verify Password *"
-                  label-for="input-5"
-                >
-                  <b-form-input
-                    id="input-5"
-                    v-model="passwordCheck"
-                    type="password"
-                    required
-                  ></b-form-input>
+                <b-form-group id="input-group-5" label="Verify Password *" label-for="input-5">
+                  <b-form-input id="input-5" v-model="passwordCheck" type="password" required></b-form-input>
                 </b-form-group>
               </div>
             </div>
             <b-button type="submit" class="submitButton">Submit</b-button>
           </b-form>
         </div>
-        <p v-if="exist" class="red">
-          An account already exist with this email.
-        </p>
-        <p v-if="show" class="red">
-          Password doesn't match
-        </p>
+        <p v-if="exist" class="red">An account already exist with this email.</p>
+        <p v-if="show" class="red">Password doesn't match</p>
       </div>
     </div>
   </div>
@@ -297,6 +233,7 @@ export default {
       success: false,
       success1: false,
       exist: false,
+      noAccount: true,
     };
   },
 
@@ -329,35 +266,40 @@ export default {
   async mounted() {
     // checking if session exist
     if (this.$session.exists() && this.$session.get("type") === "R") {
+      this.noAccount = false;
       //getting the loginid from the session
       this.loginid = this.$session.get("loginid");
+      this.email = this.$session.get("email");
+
       // refetching the query to get the reviewerid
       this.$apollo.queries.reviewerId.skip = false;
       await this.$apollo.queries.reviewerId.refetch();
       this.reviewerid = this.reviewerId.reviewerid;
+      this.fname = this.reviewerId.fname;
+      this.lname = this.reviewerId.lname;
     } else {
       this.reviewerid = 0;
     }
   },
 
   methods: {
-    setRating1: function() {
+    setRating1: function () {
       this.x1 = 1;
       this.overallRatings();
     },
-    setRating2: function() {
+    setRating2: function () {
       this.x2 = 1;
       this.overallRatings();
     },
-    setRating3: function() {
+    setRating3: function () {
       this.x3 = 1;
       this.overallRatings();
     },
-    setRating4: function() {
+    setRating4: function () {
       this.x4 = 1;
       this.overallRatings();
     },
-    setRating5: function() {
+    setRating5: function () {
       this.x5 = 1;
       this.overallRatings();
     },
@@ -385,7 +327,6 @@ export default {
           if (this.password === this.passwordCheck) {
             // sign up as a reviewer and get loginid
             await this.signup();
-
           } else {
             this.exist = false;
             this.success1 = false;
@@ -413,10 +354,10 @@ export default {
           experience: this.experience,
           satisfaction: this.satisfaction,
           overall: this.overall,
-          comments: this.comments,
-          fname: this.fname,
-          lname: this.lname,
-          email: this.email,
+          comments: (this.comments).replace(/[^A-Z0-9,./?:@&$#!()-]/ig, " "),
+          fname: (this.fname).replace(/[^A-Z0-9,./?:@&$#!()-]/ig, " "),
+          lname: (this.lname).replace(/[^A-Z0-9,./?:@&$#!()-]/ig, " "),
+          email: (this.email).replace(/[^A-Z0-9,./?:@&$#!()-]/ig, " "),
           active: this.active,
         },
         update: (cache, { data: { addReview } }) => {
@@ -437,9 +378,9 @@ export default {
         },
         update: (cache, { data: { addReviewer } }) => {
           console.log(addReviewer);
-            this.reviewerid = addReviewer.reviewerid;
-            // insert review into reviews table
-            this.submitReview();
+          this.reviewerid = addReviewer.reviewerid;
+          // insert review into reviews table
+          this.submitReview();
         },
       });
     },
@@ -458,7 +399,7 @@ export default {
         update: (cache, { data: { addUser } }) => {
           console.log(addUser);
           this.loginid = addUser.loginid;
-          console.log(this.loginid);
+          
           // insert data into reviewer table and get reviewerid
           this.addReviewerInfo();
         },

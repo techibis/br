@@ -2,12 +2,11 @@ import gql from "graphql-tag";
 
 const getAllCategoriesQuery = gql`
   {
-    allCategories{
-        value
-        label
+    allCategories {
+      value
+      label
     }
-      
   }
 `;
 
-export default getAllCategoriesQuery ;
+export default getAllCategoriesQuery;

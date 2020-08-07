@@ -41,7 +41,7 @@ export default {
       query: getUserQuery,
       variables() {
         return {
-          email: this.email,
+          email: (this.email).replace(/[^A-Z0-9,./?:@&$#!()-]/ig, " "),
           password: md5(this.password),
         };
       },

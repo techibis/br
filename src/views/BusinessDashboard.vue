@@ -190,7 +190,7 @@
               {{ review.reviewer.state }}
             </p>
             <p v-if="review.reply !== null">
-              Reply by Owner : {{ review.reply.comment }} - on {{ review.reply.date }}
+              {{ownerCompany.name}} wrote on {{ review.reply.date }} : {{ review.reply.comment }}
             </p>
             <hr />
             <br />

@@ -47,15 +47,32 @@
           <b-form-group id="input-group-9" label="Address 2" label-for="input-9">
             <b-form-input id="input-9" v-model="company.address2"></b-form-input>
           </b-form-group>
-          <b-form-group id="input-group-10" label="Suggested" label-for="input-10">
-            <b-form-input id="input-10" v-model="company.suggested"></b-form-input>
-          </b-form-group>
-          <b-form-group id="input-group-11" label="Favorite" label-for="input-11">
-            <b-form-input id="input-11" v-model="company.favorite"></b-form-input>
-          </b-form-group>
-          <b-form-group id="input-group-12" label="Approved" label-for="input-12">
-            <b-form-input id="input-12" v-model="company.approved"></b-form-input>
-          </b-form-group>
+
+          <!-- Getting Integer Value from database and setting that to boolean value -->
+          <div :set="company.suggested = company.suggested == 1? true : false">
+            <p class="title"> Suggested :  </p>
+            <toggle-button :value="true"
+            v-model="company.suggested"
+                color="#f6d185"
+                :sync="true"
+                :labels="{checked: 'Yes', unchecked: 'No'}"/>
+          </div>
+          <div :set="company.favorite = company.favorite == 1? true : false">
+            <p class="title">Favorite : </p> 
+            <toggle-button :value="true"
+            v-model="company.favorite"
+                color="#f6d185"
+                :sync="true"
+                :labels="{checked: 'Yes', unchecked: 'No'}"/>
+          </div>
+          <div :set="company.approved = company.approved == 1? true : false">
+            <p class="title">Approved :  </p>
+            <toggle-button :value="true"
+            v-model="company.approved"
+                color="#f6d185"
+                :sync="true"
+                :labels="{checked: 'Yes', unchecked: 'No'}"/>
+          </div>
 
           <b-form-group id="textarea-1" label="Business Description" label-for="textarea">
             <b-form-textarea id="textarea" v-model="company.descr"></b-form-textarea>
@@ -198,7 +215,7 @@
               {{ review.reviewer.state }}
             </p>
             <p v-if="review.reply !== null">
-              Reply by Owner : {{ review.reply.comment }} - on {{ review.reply.date }}
+               {{company.name}} wrote on {{ review.reply.date }} : {{ review.reply.comment }}
             </p>
             <hr />
             <br />
@@ -215,6 +232,11 @@ import { BootstrapVue } from "bootstrap-vue";
 import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap-vue/dist/bootstrap-vue.css";
 Vue.use(BootstrapVue);
+
+import { ToggleButton } from 'vue-js-toggle-button';
+ 
+Vue.component('ToggleButton', ToggleButton);
+
 import axios from "axios";
 
 import getCompanyQuery from "../query/business.js";
@@ -232,6 +254,9 @@ export default {
       show: false,
       checked: false,
       success: false,
+      approved: false,
+      suggested: false,
+      favorite: false,
       options: [
         { value: "Closed", text: "Closed" },
         { value: "00:00:00 AM", text: "00:00:00 AM" },
@@ -298,27 +323,29 @@ export default {
 
   methods: {
     async onSubmit() {
+      // getting boolean value from toggle button and setting to an integer value to submit into database
+       this.approved = this.company.approved == true ? 1 : 0;
+       this.suggested = this.company.suggested == true ? 1 : 0;
+       this.favorite = this.company.favorite == true ? 1 : 0;
+
       await this.$apollo.mutate({
         // Query
         mutation: updateBusinessMutation,
         variables: {
           cid: this.cid,
-          name: this.company.name,
-          fname: this.company.fname,
-          lname: this.company.lname,
-          address1: this.company.address1,
-          address2: this.company.address2,
-          city: this.city,
-          lat: parseFloat(this.lat),
-          lon: parseFloat(this.lon),
-          zip: this.company.zip,
+          name: (this.company.name).replace(/[^A-Z0-9,./?:@&$#!()-]/ig, " "),
+          fname: (this.company.fname).replace(/[^A-Z0-9,./?:@&$#!()-]/ig, " "),
+          lname: (this.company.lname).replace(/[^A-Z0-9,./?:@&$#!()-]/ig, " "),
+          address1: (this.company.address1).replace(/[^A-Z0-9,./?:@&$#!()-]/ig, " "),
+          address2: (this.company.address2).replace(/[^A-Z0-9,./?:@&$#!()-]/ig, " "),
+          zip: (this.company.zip).replace(/[^A-Z0-9]/ig, " "),
           categoryid: this.company.categoryid,
-          descr: this.company.descr,
-          website: this.company.website,
-          phone: this.company.phone,
-          suggested: parseInt(this.company.suggested),
-          favorite: parseInt(this.company.favorite),
-          approved: parseInt(this.company.approved),
+          descr: (this.company.descr).replace(/[^A-Z0-9,./?:@&$#!()-]/ig, " "),
+          website: (this.company.website).replace(/[^A-Z0-9,./?:@&$#!()-]/ig, " "),
+          phone: (this.company.phone).replace(/[^A-Z0-9]/ig, " "),
+          suggested: this.suggested,
+          favorite: this.favorite,
+          approved: this.approved,
         },
         update: (cache, { data: { updateBusiness } }) => {
           console.log(updateBusiness);
@@ -332,7 +359,7 @@ export default {
 
         try {
           await axios.post(
-            "http://localhost:4000/upload/" + this.cid,
+            "http://165.22.34.223:4000/upload/" + this.cid,
             formData
           );
         } catch (err) {
@@ -371,6 +398,7 @@ export default {
       this.success = true;
       this.checked = false;
     },
+
   },
 
   apollo: {
@@ -389,6 +417,19 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 
 <style scoped>
+
+
+.title{
+  display: inline-block;
+  width: 100px;
+  margin-bottom: 20px;
+}
+
+
+.link {
+  margin-bottom: 20px;
+}
+
 .results {
   padding: 8vw 5vw;
   background-color: #eff0f0;
@@ -398,14 +439,9 @@ export default {
 .green {
   color: green;
 }
-
-.link {
-  margin-bottom: 20px;
-}
-
 .back,
-.submitButton,
-.btn-danger {
+.submitButton ,.btn-danger{
+  margin: 20px 0;
   box-shadow: 0px 1px 0px 0px #fff6af;
   background: linear-gradient(to bottom, #ffec64 5%, #ffab23 100%);
   background-color: #ffec64;
@@ -422,13 +458,7 @@ export default {
   text-shadow: 0px 1px 0px #ffee66;
 }
 
-.back,
-.submitButton {
-  margin: 20px 0;
-}
-
 .back:hover,
-.btn-danger:hover,
 .submitButton:hover {
   background: linear-gradient(to bottom, #ffab23 5%, #ffec64 100%);
   background-color: #ffab23;
@@ -437,6 +467,8 @@ export default {
 .submitButton:active {
   position: relative;
 }
+
+
 
 .btn-danger {
   float: right;

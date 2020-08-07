@@ -38,7 +38,7 @@ export default {
   },
 
   created() {
-    if (this.$session.exists() && this.$session.get("type") === "A") {
+    if (this.$session.exists() && this.$session.get("type") === "B") {
       this.form = true;
       this.login = false;
     } else {

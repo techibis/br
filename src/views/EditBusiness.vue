@@ -114,18 +114,16 @@ export default {
         mutation: updateBusinessMutation,
         variables: {
           cid: this.ownerCompany.cid,
-          name: this.ownerCompany.name,
-          fname: this.ownerCompany.fname,
-          lname: this.ownerCompany.lname,
-          address1: this.ownerCompany.address1,
-          address2: this.ownerCompany.address2,
-          city: this.ownerCompany.city,
-          state: this.ownerCompany.state,
-          zip: this.ownerCompany.zip,
+          name: (this.ownerCompany.name).replace(/[^A-Z0-9,./?:@&$#!()-]/ig, " "),
+          fname: (this.ownerCompany.fname).replace(/[^A-Z0-9,./?:@&$#!()-]/ig, " "),
+          lname: (this.ownerCompany.lname).replace(/[^A-Z0-9,./?:@&$#!()-]/ig, " "),
+          address1: (this.ownerCompany.address1).replace(/[^A-Z0-9,./?:@&$#!()-]/ig, " "),
+          address2: (this.ownerCompany.address2).replace(/[^A-Z0-9,./?:@&$#!()-]/ig, " "),
+          zip: (this.ownerCompany.zip).replace(/[^A-Z0-9]/ig, " "),
           categoryid: this.ownerCompany.categoryid,
-          descr: this.ownerCompany.descr,
-          website: this.ownerCompany.website,
-          phone: this.ownerCompany.phone,
+          descr: (this.ownerCompany.descr).replace(/[^A-Z0-9,./?:@&$#!()-]/ig, " "),
+          website: (this.ownerCompany.website).replace(/[^A-Z0-9,./?:@&$#!()-]/ig, " "),
+          phone: (this.ownerCompany.phone).replace(/[^A-Z0-9]/ig, " "),
           suggested: parseInt(this.ownerCompany.suggested),
           favorite: parseInt(this.ownerCompany.favorite),
           approved: parseInt(this.ownerCompany.approved),
@@ -142,7 +140,7 @@ export default {
 
         try {
           await axios.post(
-            "http://localhost:4000/upload/" + this.ownerCompany.cid,
+            "http://165.22.34.223:4000/upload/" + this.ownerCompany.cid,
             formData
           );
         } catch (err) {
@@ -221,7 +219,7 @@ label {
   font-weight: bold;
 }
 
-#textarea {
+#textarea,label[for="file"] {
   font-size: 4vw;
   border-color: #f6d185;
 }
@@ -233,9 +231,6 @@ label {
   font-size: 3.5vw;
 }
 
-label[for=file] {
-  border: 1px solid #f6d185 !important;
-}
 
 @media screen and (min-width: 640px) {
   .results {
@@ -249,10 +244,11 @@ label[for=file] {
     height: 3vw;
     font-size: 2vw;
   }
-  label[for=file],
-  #textarea {
+
+  #textarea,label[for="file"] {
     font-size: 2vw;
   }
+
   .form-group {
     margin-bottom: 2rem;
   }
@@ -261,19 +257,7 @@ label[for=file] {
   }
 }
 
-@media screen and (min-width: 999px) {
-  label {
-    font-size: 1.8vw;
-  }
-  .form-group input {
-    height: 4vw;
-    font-size: 1.5vw;
-  }
-  label[for=file],
-  #textarea {
-    font-size: 1.5vw;
-  }
-}
+
 
 @media screen and (min-width: 999px) {
   label {
@@ -284,8 +268,8 @@ label[for=file] {
     font-size: 1.1vw;
   }
 
-  label[for=file],
-  #textarea {
+
+  #textarea,label[for="file"] {
     font-size: 1.2vw;
   }
 }
@@ -298,8 +282,8 @@ label[for=file] {
     height: 2.5vw;
     font-size: 0.8vw;
   }
-  label[for=file],
-  #textarea {
+
+  #textarea,label[for="file"] {
     font-size: 1vw;
   }
 }

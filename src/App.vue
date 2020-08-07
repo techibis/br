@@ -64,9 +64,6 @@ html {
   width: 100%;
 }
 
-label[for="file"] {
-  border-color: #f6d185;
-}
 
 .vs__dropdown-toggle {
   border: none;
@@ -130,6 +127,10 @@ label[for="file"] {
     font-size: 2.5vw;
     margin-bottom: 6vw;
   }
+
+  #textarea, label[for="file"] {
+    font-size: 2vw;
+  }
 }
 
 @media screen and (min-width: 999px) {
@@ -147,6 +148,10 @@ label[for="file"] {
   .form-header p {
     font-size: 1.6vw;
     margin-bottom: 4vw;
+  }
+
+  #textarea, label[for="file"] {
+    font-size: 1.2vw;
   }
 }
 
@@ -168,5 +173,66 @@ label[for="file"] {
     font-size: 1vw;
     margin-bottom: 2vw;
   }
+
+  #textarea, label[for="file"] {
+    font-size: 1vw;
+  }
 }
+
+
+/* search form */
+
+
+#form .geoapify-autocomplete-input::placeholder {
+  color: black;
+}
+
+#form .geoapify-autocomplete-input{
+  border-radius: 40px;
+  padding: 20px 25px;
+  margin: auto;
+  width: 75vw;
+  color: #000000;
+  background-color: #ffffffc9;
+  border: transparent;
+  text-align: left;
+  line-height: 24px; 
+   height: auto;
+  font-size: 1.8rem;
+  outline: none;
+}
+
+#form .geoapify-autocomplete-items{
+  width: 75vw;
+  margin: auto;
+  color: #00000099;
+  font-size: 14px;
+}
+
+#form .geoapify-close-button{
+  right:130px;
+}
+
+@media screen and (min-width: 999px) {
+
+  #form .geoapify-autocomplete-input,
+  #form .geoapify-autocomplete-items {
+    width: 22vw;
+    margin: 0 10px;
+  }
+
+  #form .geoapify-close-button{
+    right:24px;
+  }
+}
+
+
+.vs--disabled .vs__search, .vs--disabled .vs__dropdown-toggle, .vs--disabled .vs__open-indicator {
+  background-color: transparent;
+}
+
+#textarea, label[for="file"] {
+  border-color: #f6d185;
+}
+
 </style>

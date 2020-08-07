@@ -107,7 +107,7 @@ export default {
       query: checkEmailQuery,
       variables() {
         return {
-          email: this.email,
+          email: (this.email).replace(/[^A-Z0-9,./?:@&$#!()-]/ig, " "),
         };
       },
       skip() {
@@ -134,11 +134,11 @@ export default {
         this.$apollo.mutate({
           mutation: addUserMutation,
           variables: {
-            email: this.email,
+            email: (this.email).replace(/[^A-Z0-9,./?:@&$#!()-]/ig, " "),
             password: md5(this.password),
             type: this.type,
-            fname: this.fname,
-            lname: this.lname,
+            fname: (this.fname).replace(/[^A-Z0-9,./?:@&$#!()-]/ig, " "),
+            lname: (this.lname).replace(/[^A-Z0-9,./?:@&$#!()-]/ig, " "),
             active: this.active,
           },
           update: (cache, { data: { addUser } }) => {

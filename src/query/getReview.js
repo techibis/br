@@ -33,6 +33,7 @@ const getReviewQuery = gql`
       company{
         cid
         loginid
+        name
       }
     }
   }
