@@ -25,6 +25,7 @@ const getCompanyQuery = gql`
       approved
       categoryname{
         name
+        short_name
       }
       hours {
         cid

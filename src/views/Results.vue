@@ -14,53 +14,29 @@
               <h1 class="letter" v-else :set="name= company.name.charAt(0)">{{name}}</h1>
             </div>
             <div class="col-md-6 company">
-              <h1>{{ company.name }}</h1>
-              <p :set="distance= parseInt(company.distance)">Distance : {{distance}} Mile(s)</p>
+              <a :href="'/companys/' + company.name + '/' + company.cid" target="_blank">
+                <h1>{{ company.name }}</h1>
+              </a>
               <span v-if="company.favorite === 0">
                 {{
+                company.categoryname.name
+                }} > {{
                 company.categoryname.short_name
                 }}
               </span>
-              <button class="staff" v-if="company.favorite === 1">Staff Favorite</button>
+              <div class="staff" v-if="company.favorite === 1">
+                <span class="staff-icon">
+                  <img
+                    width="15px"
+                    src="@/assets/Red_and_Gold_Transparent_Rosette_Ribbon_PNG_Clipart.png"
+                  />
+                </span>
+                <span class="staff-text">Staff Favorite</span>
+              </div>
+              <p :set="distance= parseInt(company.distance)">Distance : {{distance}} Mile(s)</p>
               <p>{{ company.descr }}</p>
-              <h4>
-                <b>Contact Person:</b>
-                {{ company.fname }}
-                {{ company.lname }}
-              </h4>
-              <h4 v-if="company.address2 !== ''">
-                <b>Address:</b>
-                {{ company.address1 }},{{
-                company.address2
-                }},{{ company.city }}, {{ company.state }}-{{ company.zip }}
-              </h4>
-              <h4 v-else>
-                <b>Address:</b>
-                {{ company.address1 }}, {{ company.city }},
-                {{ company.state }}-{{ company.zip }}
-              </h4>
-              <h4>
-                <b>Phone:</b>
-                {{ company.phone }}
-              </h4>
-              <h4>
-                <b>Website:</b>
-                {{ company.website }}
-              </h4>
               <div v-if="company.ratings !== null">
-                <h4>
-                  <b>Ranking:</b>
-                  {{ company.ratings.ranking }}
-                </h4>
-                <h4>
-                  <b>Total Reviews:</b>
-                  {{ company.ratings.revcount }}
-                </h4>
-                <div class="row">
-                  <h4 class="col-md-4">
-                    <b>Average Ratings :</b>
-                  </h4>
-
+                <div class="comRating">
                   <star-rating
                     :set="(rating = parseInt(company.ratings.rating))"
                     v-model="rating"
@@ -78,9 +54,10 @@
                 </div>
               </div>
               <div v-if="company.favorite === 1">
-                <a  :href="'/companys/' + company.name + '/' + company.cid" target="_blank">
-                  View Profile & Reviews
-                </a>
+                <a
+                  :href="'/companys/' + company.name + '/' + company.cid"
+                  target="_blank"
+                >View Profile & Reviews</a>
               </div>
             </div>
             <div class="col-md-3">
@@ -104,8 +81,6 @@
                         company.address1 +
                         ',' +
                         company.city +
-                        ',' +
-                        company.state +
                         ',' +
                         company.zip
                     "
@@ -158,7 +133,6 @@ export default {
       lat: "",
       lon: "",
       companyCat: "",
-
     };
   },
 
@@ -231,8 +205,7 @@ export default {
 }
 
 .viewProfile,
-.rateBusiness,
-.staff {
+.rateBusiness {
   box-shadow: 0px 1px 0px 0px #fff6af;
   border-radius: 40px;
   border: 1px solid #ffaa22;
@@ -246,21 +219,12 @@ export default {
   text-shadow: 0px 1px 0px #ffee66;
 }
 
-.staff {
-  padding: 4px 12px;
-  border: 1px solid green;
-  text-shadow: none;
-  font-style: italic;
-  font-weight: 400;
-}
-
 .viewProfile:hover {
   background: linear-gradient(to bottom, #ffab23 5%, #ffec64 100%);
   background-color: #ffab23;
 }
 
-.rateBusiness:hover,
-.staff:hover {
+.rateBusiness:hover {
   background-color: rgba(0, 0, 0, 0.1);
 }
 .viewProfile:active,
@@ -270,9 +234,6 @@ export default {
   outline: none;
 }
 
-.col-md-3 {
-  text-align: center;
-}
 .col-md-3 .letter {
   top: 0;
   bottom: 0;
@@ -286,10 +247,17 @@ export default {
 }
 
 .col-md-3.logo {
-  border: 2px solid #d0d0d0;
+  border: 1px solid #e2e2e2;
   padding: 40px 0;
   display: flex;
   justify-content: center;
+  height: 200px;
+  width: 200px;
+  margin: 0 auto;
+}
+
+.col-md-3.logo img {
+  width: 100%;
 }
 
 .col-md-3 a {
@@ -307,10 +275,49 @@ export default {
   margin: 30px 0;
 }
 
+h1 {
+  color: #da9423;
+}
+.staff {
+  margin: 10px 0 20px;
+}
+
+.staff-icon {
+  border: 1px solid #f6d185;
+  border-right: 0;
+  padding: 7px 13px 7px 16px;
+  border-radius: 16px;
+  line-height: 24px;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.staff-text {
+  font-style: italic;
+  padding: 2px 18px 6px 8px;
+  font-size: 15px;
+  border: 1px solid #f6d185;
+  border-radius: 16px;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.comRating {
+  margin: 20px auto;
+}
+
+.col-md-8.star.vue-star-rating {
+  padding-left: 0;
+}
+
+p {
+  font-size: 14px;
+}
+.col-md-3{
+  text-align: center;
+}
+
 @media screen and (min-width: 640px) {
-  .col-md-6.company {
-    margin: 0;
-  }
   .star {
     margin-top: -10px;
   }
@@ -318,12 +325,40 @@ export default {
   .col-md-3 .letter {
     font-size: 100px;
   }
+  .results{
+    padding: 5vw 0vw;
+}
+.col-md-3 {
+    padding: 0;
+}
+}
+
+@media screen and (min-width: 768px) {
+  .col-md-6.company {
+  margin: 0px;
+}
 }
 
 @media screen and (min-width: 999px) {
   .result {
-    width: 80%;
-    padding: 20px 20px 20px 20px;
+    width: 95%;
+    padding: 20px;
+  }
+
+  .col-md-6.company {
+    margin: 0;
+  }
+  .col-md-3.logo {
+    margin: 0 auto;
+  }
+  .col-md-6 {
+    padding-left: 20px;
+  }
+}
+
+@media screen and (min-width: 1200px) {
+  .result {
+    width: 70%;
   }
 }
 </style>

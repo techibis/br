@@ -7,174 +7,186 @@
           v-if="success1"
           class="green"
         >Your account has been submitted successfully. Please sign in.</p>
-        <p>Please Rate:</p>
-        <h1>{{ company }}</h1>
-        <span>
-          If you have an account,
-          <a href="/reviewer-login">sign in</a> to
-          track your reviews.
-        </span>
-        <hr style="margin-top:30px" />
-        <div>
-          <b-form @submit.prevent="onSubmit">
-            <p>How would you like to rate this business?*</p>
-            <div class="stars">
-              <h1>Quality</h1>
-              <star-rating
-                @rating-selected="setRating1"
-                v-model="quality"
-                class="star"
-                :increment="1"
-                border-color="#f6d185"
-                :border-width="1"
-                inactive-color="#fff"
-                active-color="#f6d185"
-                :star-size="30"
-                :show-rating="false"
-              ></star-rating>
-              <p>{{ quality }}</p>
-            </div>
-            <hr />
-            <div class="stars">
-              <h1>Value</h1>
-              <star-rating
-                @rating-selected="setRating2"
-                v-model="value"
-                class="star"
-                :increment="1"
-                border-color="#f6d185"
-                :border-width="1"
-                inactive-color="#fff"
-                active-color="#f6d185"
-                :star-size="30"
-                :show-rating="false"
-              ></star-rating>
-              <p>{{ value }}</p>
-            </div>
-            <hr />
-            <div class="stars">
-              <h1>Timeliness</h1>
-              <star-rating
-                @rating-selected="setRating3"
-                v-model="timeliness"
-                class="star"
-                :increment="1"
-                border-color="#f6d185"
-                :border-width="1"
-                inactive-color="#fff"
-                active-color="#f6d185"
-                :star-size="30"
-                :show-rating="false"
-              ></star-rating>
-              <p>{{ timeliness }}</p>
-            </div>
-            <hr />
-            <div class="stars">
-              <h1>Experience</h1>
-              <star-rating
-                @rating-selected="setRating4"
-                v-model="experience"
-                class="star"
-                :increment="1"
-                border-color="#f6d185"
-                :border-width="1"
-                inactive-color="#fff"
-                active-color="#f6d185"
-                :star-size="30"
-                :show-rating="false"
-              ></star-rating>
-              <p>{{ experience }}</p>
-            </div>
-            <hr />
-            <div class="stars">
-              <h1>Satisfaction</h1>
-              <star-rating
-                @rating-selected="setRating5"
-                v-model="satisfaction"
-                class="star"
-                :increment="1"
-                border-color="#f6d185"
-                :border-width="1"
-                inactive-color="#fff"
-                active-color="#f6d185"
-                :star-size="30"
-                :show-rating="false"
-              ></star-rating>
-              <p>{{ satisfaction }}</p>
-            </div>
-            <hr />
-            <div class="stars">
-              <h1>Average Overall</h1>
-              <star-rating
-                v-model="overall"
-                class="star"
-                :increment="0.1"
-                border-color="#f6d185"
-                :border-width="1"
-                inactive-color="#fff"
-                active-color="#f6d185"
-                :star-size="30"
-                :read-only="true"
-                :fixed-points="1"
-                :show-rating="false"
-                :round-start-rating="false"
-              ></star-rating>
-              <p>{{ overall }}</p>
-            </div>
-            <hr />
+        <div class="row">
+          <div class="col-md-3 logo">
+            <img
+              v-if="company.logo !== ''"
+              :src="'http://165.22.34.223:4000/'+company.logo"
+              class="logo"
+            />
+            <h1 class="letter" v-else :set="name= company.name.charAt(0)">{{name}}</h1>
+          </div>
+          <div class="col-md-9">
+            <p>Please Rate:</p>
+            <h1 class="name">{{ companyName }}</h1>
+            <span>
+              If you have an account,
+              <a href="/reviewer-login">sign in</a> to
+              track your reviews.
+            </span>
+            <hr style="margin-top:30px" />
+            <div>
+              <b-form @submit.prevent="onSubmit">
+                <p>How would you like to rate this business?*</p>
+                <div class="stars">
+                  <h1>Quality</h1>
+                  <star-rating
+                    @rating-selected="setRating1"
+                    v-model="quality"
+                    class="star"
+                    :increment="1"
+                    border-color="#f6d185"
+                    :border-width="1"
+                    inactive-color="#fff"
+                    active-color="#f6d185"
+                    :star-size="30"
+                    :show-rating="false"
+                  ></star-rating>
+                  <p>{{ quality }}</p>
+                </div>
+                <hr />
+                <div class="stars">
+                  <h1>Value</h1>
+                  <star-rating
+                    @rating-selected="setRating2"
+                    v-model="value"
+                    class="star"
+                    :increment="1"
+                    border-color="#f6d185"
+                    :border-width="1"
+                    inactive-color="#fff"
+                    active-color="#f6d185"
+                    :star-size="30"
+                    :show-rating="false"
+                  ></star-rating>
+                  <p>{{ value }}</p>
+                </div>
+                <hr />
+                <div class="stars">
+                  <h1>Timeliness</h1>
+                  <star-rating
+                    @rating-selected="setRating3"
+                    v-model="timeliness"
+                    class="star"
+                    :increment="1"
+                    border-color="#f6d185"
+                    :border-width="1"
+                    inactive-color="#fff"
+                    active-color="#f6d185"
+                    :star-size="30"
+                    :show-rating="false"
+                  ></star-rating>
+                  <p>{{ timeliness }}</p>
+                </div>
+                <hr />
+                <div class="stars">
+                  <h1>Experience</h1>
+                  <star-rating
+                    @rating-selected="setRating4"
+                    v-model="experience"
+                    class="star"
+                    :increment="1"
+                    border-color="#f6d185"
+                    :border-width="1"
+                    inactive-color="#fff"
+                    active-color="#f6d185"
+                    :star-size="30"
+                    :show-rating="false"
+                  ></star-rating>
+                  <p>{{ experience }}</p>
+                </div>
+                <hr />
+                <div class="stars">
+                  <h1>Satisfaction</h1>
+                  <star-rating
+                    @rating-selected="setRating5"
+                    v-model="satisfaction"
+                    class="star"
+                    :increment="1"
+                    border-color="#f6d185"
+                    :border-width="1"
+                    inactive-color="#fff"
+                    active-color="#f6d185"
+                    :star-size="30"
+                    :show-rating="false"
+                  ></star-rating>
+                  <p>{{ satisfaction }}</p>
+                </div>
+                <hr />
+                <div class="stars">
+                  <h1>Average Overall</h1>
+                  <star-rating
+                    v-model="overall"
+                    class="star"
+                    :increment="0.1"
+                    border-color="#f6d185"
+                    :border-width="1"
+                    inactive-color="#fff"
+                    active-color="#f6d185"
+                    :star-size="30"
+                    :read-only="true"
+                    :fixed-points="1"
+                    :show-rating="false"
+                    :round-start-rating="false"
+                  ></star-rating>
+                  <p>{{ overall }}</p>
+                </div>
+                <hr />
 
-            <b-form-group id="textarea-1" label="Comments *" label-for="textarea">
-              <b-form-textarea id="textarea" v-model="comments" rows="3" max-rows="16" required></b-form-textarea>
-            </b-form-group>
-            <div class="row" v-if="noAccount">
-              <div class="form-group col-md-4">
-                <b-form-group id="input-group-1" label="First Name *" label-for="input-1">
-                  <b-form-input id="input-1" v-model="fname" required></b-form-input>
+                <b-form-group id="textarea-1" label="Comments *" label-for="textarea">
+                  <b-form-textarea id="textarea" v-model="comments" rows="3" max-rows="16" required></b-form-textarea>
                 </b-form-group>
-              </div>
-              <div class="form-group col-md-4">
-                <b-form-group id="input-group-2" label="Last Name *" label-for="input-2">
-                  <b-form-input id="input-2" v-model="lname" required></b-form-input>
-                </b-form-group>
-              </div>
-              <div class="form-group col-md-4">
-                <b-form-group id="input-group-3" label="Email *" label-for="input-3">
-                  <b-form-input id="input-3" v-model="email" type="email" required></b-form-input>
-                </b-form-group>
-              </div>
-            </div>
-            <b-form-checkbox
-              id="checkbox-1"
-              name="checkbox-1"
-              v-model="selected"
-              required
-            >I agree to the terms of service and privacy policy.</b-form-checkbox>
-            <div v-if="noAccount">
-              <b-form-checkbox
-                id="checkbox-2"
-                v-model="checked"
-                name="checkbox-2"
-              >Create an account for full control over my reviews.</b-form-checkbox>
-            </div>
+                <div class="row" v-if="noAccount">
+                  <div class="form-group col-md-4">
+                    <b-form-group id="input-group-1" label="First Name *" label-for="input-1">
+                      <b-form-input id="input-1" v-model="fname" required></b-form-input>
+                    </b-form-group>
+                  </div>
+                  <div class="form-group col-md-4">
+                    <b-form-group id="input-group-2" label="Last Name *" label-for="input-2">
+                      <b-form-input id="input-2" v-model="lname" required></b-form-input>
+                    </b-form-group>
+                  </div>
+                  <div class="form-group col-md-4">
+                    <b-form-group id="input-group-3" label="Email *" label-for="input-3">
+                      <b-form-input id="input-3" v-model="email" type="email" required></b-form-input>
+                    </b-form-group>
+                  </div>
+                </div>
+                <b-form-checkbox
+                  id="checkbox-1"
+                  name="checkbox-1"
+                  v-model="selected"
+                  required
+                >I agree to the terms of service and privacy policy.</b-form-checkbox>
+                <div v-if="noAccount">
+                  <b-form-checkbox
+                    id="checkbox-2"
+                    v-model="checked"
+                    name="checkbox-2"
+                  >Create an account for full control over my reviews.</b-form-checkbox>
+                </div>
 
-            <br />
-            <div class="row" v-if="checked">
-              <div class="form-group col-md-6">
-                <b-form-group id="input-group-4" label="Password *" label-for="input-4">
-                  <b-form-input id="input-4" v-model="password" type="password" required></b-form-input>
-                </b-form-group>
-              </div>
-              <div class="form-group col-md-6">
-                <b-form-group id="input-group-5" label="Verify Password *" label-for="input-5">
-                  <b-form-input id="input-5" v-model="passwordCheck" type="password" required></b-form-input>
-                </b-form-group>
-              </div>
+                <br />
+                <div class="row" v-if="checked">
+                  <div class="form-group col-md-6">
+                    <b-form-group id="input-group-4" label="Password *" label-for="input-4">
+                      <b-form-input id="input-4" v-model="password" type="password" required></b-form-input>
+                    </b-form-group>
+                  </div>
+                  <div class="form-group col-md-6">
+                    <b-form-group id="input-group-5" label="Verify Password *" label-for="input-5">
+                      <b-form-input id="input-5" v-model="passwordCheck" type="password" required></b-form-input>
+                    </b-form-group>
+                  </div>
+                </div>
+                <b-button type="submit" class="submitButton">Submit</b-button>
+              </b-form>
             </div>
-            <b-button type="submit" class="submitButton">Submit</b-button>
-          </b-form>
+            <p v-if="exist" class="red">An account already exist with this email.</p>
+            <p v-if="show" class="red">Password doesn't match</p>
+          </div>
         </div>
-        <p v-if="exist" class="red">An account already exist with this email.</p>
-        <p v-if="show" class="red">Password doesn't match</p>
       </div>
     </div>
   </div>
@@ -188,6 +200,7 @@ import getReviewerIdQuery from "../query/getReviewerId.js";
 import checkEmailQuery from "../query/checkEmail.js";
 import addUserMutation from "../query/addUser.js";
 import addReviewerMutation from "../query/addReviewer.js";
+import getCompanyQuery from "../query/business.js";
 
 import StarRating from "vue-star-rating";
 Vue.component("star-rating", StarRating);
@@ -205,7 +218,7 @@ export default {
   data() {
     return {
       cid: this.$route.params.cid,
-      company: this.$route.params.company,
+      companyName: this.$route.params.company,
       reviewerid: null,
       quality: 0,
       value: 0,
@@ -247,6 +260,15 @@ export default {
       },
       skip() {
         return this.skipQuery;
+      },
+    },
+
+    company: {
+      query: getCompanyQuery,
+      variables() {
+        return {
+          cid: this.cid,
+        };
       },
     },
 
@@ -354,10 +376,10 @@ export default {
           experience: this.experience,
           satisfaction: this.satisfaction,
           overall: this.overall,
-          comments: (this.comments).replace(/[^A-Z0-9,./?:@&$#!()-]/ig, " "),
-          fname: (this.fname).replace(/[^A-Z0-9,./?:@&$#!()-]/ig, " "),
-          lname: (this.lname).replace(/[^A-Z0-9,./?:@&$#!()-]/ig, " "),
-          email: (this.email).replace(/[^A-Z0-9,./?:@&$#!()-]/ig, " "),
+          comments: this.comments.replace(/[^A-Z0-9,./?:@&$#!()-]/gi, " "),
+          fname: this.fname.replace(/[^A-Z0-9,./?:@&$#!()-]/gi, " "),
+          lname: this.lname.replace(/[^A-Z0-9,./?:@&$#!()-]/gi, " "),
+          email: this.email.replace(/[^A-Z0-9,./?:@&$#!()-]/gi, " "),
           active: this.active,
         },
         update: (cache, { data: { addReview } }) => {
@@ -399,7 +421,7 @@ export default {
         update: (cache, { data: { addUser } }) => {
           console.log(addUser);
           this.loginid = addUser.loginid;
-          
+
           // insert data into reviewer table and get reviewerid
           this.addReviewerInfo();
         },
@@ -472,6 +494,7 @@ export default {
 .stars h1 {
   font-size: 3vw;
   width: 25%;
+  margin: auto 0;
 }
 .star p {
   float: right;
@@ -499,19 +522,45 @@ export default {
   background: linear-gradient(to bottom, #ffab23 5%, #ffec64 100%);
   background-color: #ffab23;
 }
+.col-md-3.logo {
+  border: 1px solid #e2e2e2;
+  padding: 40px 0;
+  display: flex;
+  justify-content: center;
+  height: 200px;
+  width: 200px;
+  margin: 0 auto 20px;
+}
 
+.col-md-3 .letter {
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+  font-family: "Monoton", cursive;
+  font-size: 75px;
+  line-height: 1;
+  color: grey;
+}
+
+.col-md-3.logo img {
+  width: 100%;
+}
+.col-md-9 .name {
+  color: #da9423;
+}
 @media screen and (min-width: 640px) {
   .ratings {
     padding: 8vw 5vw;
-  }
-
-  .data > div {
-    width: 75%;
   }
   .stars h1 {
     font-size: 18px;
     margin: auto 0;
     width: 35%;
+  }
+  .col-md-3 .letter {
+    font-size: 100px;
   }
 
   .star {
@@ -520,11 +569,18 @@ export default {
   .stars p {
     margin: auto 0;
   }
+
+  .col-md-9 {
+    padding-left: 40px;
+  }
 }
 
 @media screen and (min-width: 999px) {
   .data {
-    width: 60%;
+    width: 80%;
+  }
+  .col-md-3.logo {
+    margin: 0 auto;
   }
 }
 </style>
