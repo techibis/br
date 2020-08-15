@@ -13,7 +13,9 @@
           </div>
           <div class="col-md-9">
             <h1>{{ company.name }}</h1>
-            <span class="cat">{{ company.categoryname.name }} > {{ company.categoryname.short_name }}</span>
+            <span
+              class="cat"
+            >{{ company.categoryname.name }} > {{ company.categoryname.short_name }}</span>
             <div class="stars" v-if="company.ratings !== null">
               <star-rating
                 :set="(rating = parseInt(company.ratings.rating))"
@@ -74,10 +76,9 @@
                   <div class="stars" v-if="company.ratings !== null">
                     <h4>
                       {{ review.fname }} {{ review.lname }}
-                    
                       <span
                         v-if="review.reviewer !== null"
-                      > - {{ review.reviewer.city }}, {{ review.reviewer.state }}</span>
+                      >- {{ review.reviewer.city }}, {{ review.reviewer.state }}</span>
                     </h4>
                     <star-rating
                       :set="(rating = parseInt(review.overall))"
@@ -99,12 +100,12 @@
 
                     <p v-if="review.reply !== null">
                       <strong>{{company.name}}</strong>
-                      replied on {{ review.reply.date }} : <strong>{{ review.reply.comment }}</strong>
+                      replied on {{ review.reply.date }} :
+                      <strong>{{ review.reply.comment }}</strong>
                     </p>
                   </div>
-
                 </div>
-                <hr>
+                <hr />
                 <br />
               </div>
             </div>
@@ -268,9 +269,9 @@ export default {
   margin: 20px auto;
 }
 
-p.date{
-    display: inline-block;
-      margin: 10px auto;
+p.date {
+  display: inline-block;
+  margin: 10px auto;
 }
 
 .stars {
@@ -278,12 +279,11 @@ p.date{
   text-align: left;
 }
 
-h2{
+h2 {
   margin: 40px auto;
 }
 
-
-h4.span{
+h4.span {
   color: black;
 }
 
@@ -333,6 +333,12 @@ h4.span{
 
   .col-md-9 {
     padding-left: 40px;
+  }
+}
+
+@media screen and (min-width: 1299px) {
+  .col-md-3.logo img {
+    width: inherit;
   }
 }
 </style>

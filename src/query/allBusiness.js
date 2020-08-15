@@ -25,6 +25,7 @@ const getCompanysQuery = gql`
         suggested
         favorite
         approved
+        rank
         ratings {
           cid
           rating

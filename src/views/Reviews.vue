@@ -547,6 +547,7 @@ export default {
 .col-md-3.logo img {
   width: 100%;
 }
+
 .col-md-9 .name {
   color: #da9423;
 }
@@ -581,6 +582,12 @@ export default {
   }
   .col-md-3.logo {
     margin: 0 auto;
+  }
+}
+
+@media screen and (min-width: 1299px) {
+  .col-md-3.logo img {
+    width: inherit;
   }
 }
 </style>

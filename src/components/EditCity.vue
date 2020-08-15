@@ -44,7 +44,7 @@ export default {
     mounted() {
         const autocomplete = new GeocoderAutocomplete(
         document.getElementById("autocomplete"),
-        "f6f712c4b7c7422bad41c44ccebb7627",
+        "e5b3d7c8eec94a7dba4652546a1b3b23",
         {
             /* Geocoder options */
         }

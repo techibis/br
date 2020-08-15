@@ -57,6 +57,7 @@
           </tr>
         </tbody>
       </table>
+      <a href="/add-business-free"><button class="freeButton">Add Free Listing</button></a>
     </div>
     <div>
       <table class="table table-bordered">
@@ -115,7 +116,7 @@
           </tr>
         </tbody>
       </table>
-      <Table />
+      <a href="https://businessrate.myshopify.com/cart/35627447222437:1" target="_blank"><button class="premiumButton">Add a Premium Listing</button></a>
     </div>
   </div>
 </template>
@@ -170,6 +171,44 @@ table td {
 
 .grey {
   color: #cccccc;
+}
+
+.premiumButton, .freeButton {
+  box-shadow: 0px 1px 0px 0px #fff6af;
+  border-radius: 10px;
+  border: 1px solid #ffaa22;
+  cursor: pointer;
+  color: #333333;
+  font-family: Arial;
+  font-size: 18px;
+  font-weight: bold;
+  padding: 12px 48px;
+  text-decoration: none;
+  text-shadow: 0px 1px 0px #ffee66;
+  margin-top: 40px;
+}
+
+.premiumButton{
+    background: linear-gradient(to bottom, #ffec64 5%, #ffab23 100%);
+  background-color: #ffec64;
+}
+
+
+.premiumButton:hover {
+  background: linear-gradient(to bottom, #ffab23 5%, #ffec64 100%);
+  background-color: #ffab23;
+}
+
+
+.freeButton:hover {
+  background-color: rgb(227, 227, 227);
+}
+
+.premiumButton:active,
+.freeButton:active,
+.premiumButton:focus,
+.freeButton:focus {
+  outline: none;
 }
 
 @media screen and (min-width: 640px) {

@@ -2,6 +2,113 @@
   <div class="results main-container">
     <h1>All Companys for: " {{ companyCat }} "</h1>
     <div v-if="category" class="apollo">
+      <div class="data" v-for="company in category.companys" :key="company.lat">
+        <div v-if="company.favorite === 1">
+          <div class="result">
+            <div class="row main">
+              <div class="col-md-3 logo">
+                <img
+                  v-if="company.logo !== ''"
+                  :src="'http://165.22.34.223:4000/'+company.logo"
+                  class="logo"
+                />
+                <h1 class="letter" v-else :set="name= company.name.charAt(0)">{{name}}</h1>
+              </div>
+              <div class="col-md-6 company">
+                <a :href="'/companys/' + company.name + '/' + company.cid" target="_blank">
+                  <h1>{{ company.name }}</h1>
+                </a>
+                <div class="staff">
+                  <span class="staff-icon">
+                    <img
+                      width="15px"
+                      src="@/assets/Red_and_Gold_Transparent_Rosette_Ribbon_PNG_Clipart.png"
+                    />
+                  </span>
+                  <span class="staff-text">Staff Favorite</span>
+                </div>
+                <p
+                  class="dis"
+                  :set="distance= parseInt(company.distance)"
+                >Distance : {{distance}} Mile(s)</p>
+                <p>{{ company.descr }}</p>
+                <div v-if="company.ratings !== null">
+                  <div class="comRating">
+                    <star-rating
+                      :set="(rating = parseInt(company.ratings.rating))"
+                      v-model="rating"
+                      class="col-md-8 star"
+                      :increment="0.1"
+                      border-color="#f6d185"
+                      :border-width="1"
+                      inactive-color="#fff"
+                      active-color="#f6d185"
+                      :star-size="30"
+                      :read-only="true"
+                      :fixed-points="1"
+                      :round-start-rating="false"
+                    ></star-rating>
+                  </div>
+                </div>
+                <a
+                  :href="'/companys/' + company.name + '/' + company.cid"
+                  target="_blank"
+                >View Profile & Reviews</a>
+              </div>
+              <div class="col-md-3">
+                <a :href="company.website" target="_blank">
+                  <button class="viewProfile">
+                    <i class="fa fa-external-link" aria-hidden="true"></i>
+                    <b>Visit</b> Website
+                  </button>
+                </a>
+                <a :href="'tel:' + company.phone" target="_blank">
+                  <button class="rateBusiness">
+                    <b>
+                      <i class="fa fa-phone" aria-hidden="true"></i> Call
+                    </b> Now
+                  </button>
+                </a>
+                <a
+                  :href="
+                        'http://maps.google.com/?q=' +
+                          company.address1 +
+                          ',' +
+                          company.city +
+                          ',' +
+                          company.zip
+                      "
+                  target="_blank"
+                >
+                  <i class="fa fa-map-marker" aria-hidden="true">
+                    <b>
+                      Get
+                      Direction
+                    </b>
+                  </i>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="map">
+        <mapbox
+          access-token="pk.eyJ1IjoiYnVzaW5lc3NyYXRlIiwiYSI6ImNrZHJ0NXJ4czBoYWoycnBoazJtMTlycHIifQ.JWg1JG8JIbpbFLQQvNsq9g"
+          :map-options="{
+          style: 'mapbox://styles/mapbox/streets-v11',
+          center: [this.lon, this.lat],
+          zoom: 9,
+        }"
+          :geolocate-control="{
+          show: true,
+          position: 'top-left',
+        }"
+          @map-load="loaded"
+          @geolocate-error="geolocateError"
+          @geolocate-geolocate="geolocate"
+        />
+      </div>
       <div class="data" v-for="company in category.companys" :key="company.cid">
         <div class="result">
           <div class="row main">
@@ -15,24 +122,15 @@
             </div>
             <div class="col-md-6 company">
               <a :href="'/companys/' + company.name + '/' + company.cid" target="_blank">
-                <h1>{{ company.name }}</h1>
+                <h1>{{ company.rank }}. {{ company.name }}</h1>
               </a>
-              <span v-if="company.favorite === 0">
+              <span>
                 {{
                 company.categoryname.name
                 }} > {{
                 company.categoryname.short_name
                 }}
               </span>
-              <div class="staff" v-if="company.favorite === 1">
-                <span class="staff-icon">
-                  <img
-                    width="15px"
-                    src="@/assets/Red_and_Gold_Transparent_Rosette_Ribbon_PNG_Clipart.png"
-                  />
-                </span>
-                <span class="staff-text">Staff Favorite</span>
-              </div>
               <p :set="distance= parseInt(company.distance)">Distance : {{distance}} Mile(s)</p>
               <p>{{ company.descr }}</p>
               <div v-if="company.ratings !== null">
@@ -53,59 +151,18 @@
                   ></star-rating>
                 </div>
               </div>
-              <div v-if="company.favorite === 1">
-                <a
-                  :href="'/companys/' + company.name + '/' + company.cid"
-                  target="_blank"
-                >View Profile & Reviews</a>
-              </div>
             </div>
             <div class="col-md-3">
-              <div v-if="company.favorite === 1">
-                <a :href="company.website" target="_blank">
-                  <button class="viewProfile">
-                    <i class="fa fa-external-link" aria-hidden="true"></i>
-                    <b>Visit</b> Website
-                  </button>
-                </a>
-                <a :href="'tel:' + company.phone" target="_blank">
-                  <button class="rateBusiness">
-                    <b>
-                      <i class="fa fa-phone" aria-hidden="true"></i> Call
-                    </b> Now
-                  </button>
-                </a>
-                <a
-                  :href="
-                      'http://maps.google.com/?q=' +
-                        company.address1 +
-                        ',' +
-                        company.city +
-                        ',' +
-                        company.zip
-                    "
-                  target="_blank"
-                >
-                  <i class="fa fa-map-marker" aria-hidden="true">
-                    <b>
-                      Get
-                      Direction
-                    </b>
-                  </i>
-                </a>
-              </div>
-              <div v-if="company.favorite === 0">
-                <a :href="'/companys/' + company.name + '/' + company.cid" target="_blank">
-                  <button class="viewProfile">
-                    <b>View Profile</b>
-                  </button>
-                </a>
-                <a :href="'/reviews/' + company.name + '/' + company.cid" target="_blank">
-                  <button class="rateBusiness">
-                    <b>Rate Business</b>
-                  </button>
-                </a>
-              </div>
+              <a :href="'/companys/' + company.name + '/' + company.cid" target="_blank">
+                <button class="viewProfile">
+                  <b>View Profile</b>
+                </button>
+              </a>
+              <a :href="'/reviews/' + company.name + '/' + company.cid" target="_blank">
+                <button class="rateBusiness">
+                  <b>Rate Business</b>
+                </button>
+              </a>
             </div>
           </div>
         </div>
@@ -125,6 +182,10 @@ import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap-vue/dist/bootstrap-vue.css";
 Vue.use(BootstrapVue);
 
+// var mapboxgl = require("mapbox-gl");
+import Mapbox from "mapbox-gl-vue";
+import marker from "@/assets/marker.png";
+import favorite from "@/assets/favorite.png";
 export default {
   name: "Results",
 
@@ -134,6 +195,103 @@ export default {
       lon: "",
       companyCat: "",
     };
+  },
+
+  components: { Mapbox },
+
+  methods: {
+    loaded(map) {
+      map.loadImage(favorite, function (error, image) {
+        if (error) throw error;
+        map.addImage("favorite", image);
+      });
+
+      map.loadImage(marker, function (error, image) {
+        if (error) throw error;
+        map.addImage("marker", image);
+      });
+
+      for (let i = 0; i < this.category.companys.length; i++) {
+        if (this.category.companys[i].favorite === 1) {
+          map.addLayer({
+            id: "points" + i,
+            type: "symbol",
+            source: {
+              type: "geojson",
+              data: {
+                type: "FeatureCollection",
+                features: [
+                  {
+                    type: "Feature",
+                    geometry: {
+                      type: "Point",
+                      coordinates: [
+                        this.category.companys[i].lon,
+                        this.category.companys[i].lat,
+                      ],
+                    },
+                    properties: {
+                      title: this.category.companys[i].rank,
+                    },
+                  },
+                ],
+              },
+            },
+            layout: {
+              "icon-image": "favorite",
+              "icon-size": 0.1,
+              "icon-allow-overlap": true,
+            },
+          });
+        } else {
+          map.addLayer({
+            id: "points" + i,
+            type: "symbol",
+            source: {
+              type: "geojson",
+              data: {
+                type: "FeatureCollection",
+                features: [
+                  {
+                    type: "Feature",
+                    geometry: {
+                      type: "Point",
+                      coordinates: [
+                        this.category.companys[i].lon,
+                        this.category.companys[i].lat,
+                      ],
+                    },
+                    properties: {
+                      title: this.category.companys[i].rank,
+                      },
+                  },
+                ],
+              },
+            },
+
+            layout: {
+              "icon-image": "marker",
+              "icon-size": 0.08,
+              "icon-allow-overlap": true,
+              "text-field": "{title}",
+              "text-font": ["Open Sans Semibold", "Arial Unicode MS Bold"],
+              "text-offset": [0, -0.5],
+              "text-anchor": "center",
+            },
+          });
+        }
+      }
+    },
+
+
+    geolocateError(control, positionError) {
+      console.log(positionError);
+    },
+    geolocate(control, position) {
+      console.log(
+        `User position: ${position.coords.latitude}, ${position.coords.longitude}`
+      );
+    },
   },
 
   created() {
@@ -175,6 +333,22 @@ export default {
   margin: 0;
 }
 
+.map {
+  margin: 30px auto 80px;
+  text-align: right;
+  height: 320px;
+  position: relative;
+  padding: 20px 20px 20px 20px;
+}
+
+#map {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+}
+
 .result {
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
   padding: 20px 20px 20px 20px;
@@ -191,7 +365,6 @@ export default {
 }
 .logo img {
   width: 100%;
-  margin: auto;
 }
 
 .loginSignUpButtons {
@@ -281,6 +454,9 @@ h1 {
 .staff {
   margin: 10px 0 20px;
 }
+.dis {
+  margin: 10px 0;
+}
 
 .staff-icon {
   border: 1px solid #f6d185;
@@ -313,7 +489,7 @@ h1 {
 p {
   font-size: 14px;
 }
-.col-md-3{
+.col-md-3 {
   text-align: center;
 }
 
@@ -325,24 +501,31 @@ p {
   .col-md-3 .letter {
     font-size: 100px;
   }
-  .results{
-    padding: 5vw 0vw;
-}
-.col-md-3 {
+  .results {
+    padding: 5vw;
+  }
+  .col-md-3 {
     padding: 0;
-}
+  }
+  .map {
+    height: 400px;
+  }
 }
 
 @media screen and (min-width: 768px) {
   .col-md-6.company {
-  margin: 0px;
-}
+    margin: 0px;
+  }
 }
 
 @media screen and (min-width: 999px) {
   .result {
     width: 95%;
     padding: 20px;
+  }
+
+  .map {
+    width: 95%;
   }
 
   .col-md-6.company {
@@ -357,8 +540,14 @@ p {
 }
 
 @media screen and (min-width: 1200px) {
-  .result {
+  .result,
+  .map {
     width: 70%;
+  }
+}
+@media screen and (min-width: 1299px) {
+  .col-md-3.logo img {
+    width: inherit;
   }
 }
 </style>
