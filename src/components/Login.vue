@@ -2,6 +2,10 @@
   <div class="login">
     <b-form @submit.prevent="onSubmit">
       <p class="red" v-if="show">Email or Password wrong!</p>
+      <p
+        class="red"
+        v-if="inactive"
+      >Your account has not been verified yet. Please check your email and click on the verification link to verify your account</p>
       <b-form-group id="input-group-1" label="Email Address" label-for="input-1">
         <b-form-input id="input-1" required v-model="email" type="email"></b-form-input>
       </b-form-group>
@@ -34,6 +38,7 @@ export default {
       password: "",
       user: null,
       show: false,
+      inactive: false,
     };
   },
   apollo: {
@@ -41,7 +46,7 @@ export default {
       query: getUserQuery,
       variables() {
         return {
-          email: (this.email).replace(/[^A-Z0-9,./?:@&$#!()-]/ig, " "),
+          email: this.email.replace(/[^A-Z0-9,./?:@&$#!()_-]/gi, " "),
           password: md5(this.password),
         };
       },
@@ -79,14 +84,21 @@ export default {
           this.$router.push("/vue-admin");
         }
         if (this.user.email == this.email && this.user.type == "B") {
-          this.$router.push("/bdashboard");
+          if (this.user.active == 1) {
+            this.$router.push("/bdashboard");
+          } else {
+            this.show = false;
+            this.inactive = true;
+            this.resetUser();
+          }
         }
         if (this.user.email == this.email && this.user.type == "R") {
           this.$router.push("/rdashboard");
         }
       } else {
-        this.resetUser();
+         this.inactive = false;
         this.show = true;
+        this.resetUser();
       }
     },
     resetUser() {

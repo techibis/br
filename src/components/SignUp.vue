@@ -1,68 +1,38 @@
 <template>
   <div class="signup">
     <b-form @submit.prevent="onSubmit">
-      <p v-if="success" class="red">
-        You have successfully creates an account. Please log in.
-      </p>
-      <p v-if="exist" class="red">
-        An account already exist with this email.
-      </p>
-      <p v-if="show" class="red">
-        Password doesn't match
-      </p>
+      <div v-if="success" class="ok">
+        <p
+          v-if="type == 'B'"
+        >You have successfully created an account. A verification link has been sent to your email address. Please click on that link to verify your account.</p>
+        <p v-else>You have successfully creates an account. Please log in.</p>
+      </div>
+      <p v-if="exist" class="red">An account already exist with this email.</p>
+      <p v-if="show" class="red">Password doesn't match</p>
       <div class="row">
         <div class="form-group col-md-6">
-          <b-form-group
-            id="input-group-1"
-            label="First Name"
-            label-for="input-1"
-          >
-            <b-form-input id="input-1" required v-model="fname" type="text">
-            </b-form-input>
+          <b-form-group id="input-group-1" label="First Name" label-for="input-1">
+            <b-form-input id="input-1" required v-model="fname" type="text"></b-form-input>
           </b-form-group>
         </div>
         <div class="form-group col-md-6">
-          <b-form-group
-            id="input-group-2"
-            label="Last Name"
-            label-for="input-2"
-          >
-            <b-form-input id="input-2" required v-model="lname" type="text">
-            </b-form-input>
+          <b-form-group id="input-group-2" label="Last Name" label-for="input-2">
+            <b-form-input id="input-2" required v-model="lname" type="text"></b-form-input>
           </b-form-group>
         </div>
       </div>
-      <b-form-group
-        id="input-group-3"
-        label="Email Address"
-        label-for="input-3"
-      >
-        <b-form-input id="input-3" required v-model="email" type="email">
-        </b-form-input>
+      <b-form-group id="input-group-3" label="Email Address" label-for="input-3">
+        <b-form-input id="input-3" required v-model="email" type="email"></b-form-input>
       </b-form-group>
       <div class="row">
         <div class="form-group col-md-6">
           <b-form-group id="input-group-4" label="Password" label-for="input-4">
-            <b-form-input
-              id="input-4"
-              required
-              v-model="password"
-              type="password"
-            ></b-form-input>
+            <b-form-input id="input-4" required v-model="password" type="password"></b-form-input>
           </b-form-group>
         </div>
         <div class="form-group col-md-6">
-          <b-form-group
-            id="input-group-5"
-            label="Verify Password"
-            label-for="input-5"
-          >
-            <b-form-input
-              id="input-5"
-              required
-              v-model="passwordCheck"
-              type="password"
-            ></b-form-input>
+          <b-form-group id="input-group-5" label="Verify Password" label-for="input-5">
+            <b-form-input id="input-5" required v-model="passwordCheck" type="password"></b-form-input>
           </b-form-group>
         </div>
       </div>
@@ -83,6 +53,8 @@ Vue.use(BootstrapVue);
 import checkEmailQuery from "../query/checkEmail.js";
 import addUserMutation from "../query/addUser.js";
 
+import axios from "axios";
+
 export default {
   name: "SignUp",
   props: ["source"],
@@ -101,13 +73,12 @@ export default {
     };
   },
 
-
   apollo: {
     checkEmail: {
       query: checkEmailQuery,
       variables() {
         return {
-          email: (this.email).replace(/[^A-Z0-9,./?:@&$#!()-]/ig, " "),
+          email: this.email.replace(/[^A-Z0-9,./?:@&$#!()_-]/gi, " "),
         };
       },
       skip() {
@@ -115,6 +86,21 @@ export default {
       },
     },
   },
+
+  // created() {
+  //   let userEmail = "a_mirza2010@yahoo.com";
+  //   let userId = "12";
+  //   try {
+  //     axios.post(
+  //       "https://br.softwarefactoryexperts.com:4000/send/" +
+  //         userEmail +
+  //         "/" +
+  //         userId
+  //     );
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  // },
 
   methods: {
     async onSubmit() {
@@ -130,19 +116,31 @@ export default {
     },
 
     signup() {
+      this.active = this.type == "B" ? 0 : 1;
       if (this.password === this.passwordCheck) {
         this.$apollo.mutate({
           mutation: addUserMutation,
           variables: {
-            email: (this.email).replace(/[^A-Z0-9,./?:@&$#!()-]/ig, " "),
+            email: this.email.replace(/[^A-Z0-9,./?:@&$#!()_-]/gi, " "),
             password: md5(this.password),
             type: this.type,
-            fname: (this.fname).replace(/[^A-Z0-9,./?:@&$#!()-]/ig, " "),
-            lname: (this.lname).replace(/[^A-Z0-9,./?:@&$#!()-]/ig, " "),
+            fname: this.fname.replace(/[^A-Z0-9,./?:@&$#!()-]/gi, " "),
+            lname: this.lname.replace(/[^A-Z0-9,./?:@&$#!()-]/gi, " "),
             active: this.active,
           },
           update: (cache, { data: { addUser } }) => {
-            console.log(addUser);
+            let userEmail = addUser.email;
+            let userId = addUser.loginid;
+            try {
+              axios.post(
+                "https://br.softwarefactoryexperts.com:4000/send/" +
+                  userEmail +
+                  "/" +
+                  userId
+              );
+            } catch (err) {
+              console.log(err);
+            }
           },
         });
         this.resetForm();
@@ -168,6 +166,11 @@ export default {
 </script>
 
 <style scoped>
+.ok {
+  color: green;
+  font-style: italic;
+  font-size: 12px;
+}
 .red {
   color: red;
   font-style: italic;

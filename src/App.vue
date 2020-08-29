@@ -64,7 +64,6 @@ html {
   width: 100%;
 }
 
-
 .vs__dropdown-toggle {
   border: none;
   padding: 0;
@@ -128,7 +127,8 @@ html {
     margin-bottom: 6vw;
   }
 
-  #textarea, label[for="file"] {
+  #textarea,
+  label[for="file"] {
     font-size: 2vw;
   }
 }
@@ -150,7 +150,8 @@ html {
     margin-bottom: 4vw;
   }
 
-  #textarea, label[for="file"] {
+  #textarea,
+  label[for="file"] {
     font-size: 1.2vw;
   }
 }
@@ -174,20 +175,31 @@ html {
     margin-bottom: 2vw;
   }
 
-  #textarea, label[for="file"] {
+  #textarea,
+  label[for="file"] {
     font-size: 1vw;
   }
 }
 
-
 /* search form */
 
-
-#form .geoapify-autocomplete-input::placeholder {
+#form .geoapify-autocomplete-input::placeholder,
+.vue-treeselect__placeholder {
   color: black;
 }
 
-#form .geoapify-autocomplete-input{
+.vue-treeselect__placeholder {
+  margin-top: -4px;
+}
+
+.vue-treeselect__control{
+  background-color: transparent;
+  border: none;
+  height: auto;
+}
+
+#form .geoapify-autocomplete-input,
+.vue-treeselect {
   border-radius: 40px;
   padding: 20px 25px;
   margin: auto;
@@ -196,43 +208,48 @@ html {
   background-color: #ffffffc9;
   border: transparent;
   text-align: left;
-  line-height: 24px; 
-   height: auto;
+  line-height: 24px;
+  height: auto;
   font-size: 1.8rem;
   outline: none;
 }
 
-#form .geoapify-autocomplete-items{
+#form .geoapify-autocomplete-input{
+  margin-bottom: 20px;
+}
+
+#form .geoapify-autocomplete-items {
   width: 75vw;
   margin: auto;
   color: #00000099;
   font-size: 14px;
 }
 
-#form .geoapify-close-button{
-  right:130px;
+#form .geoapify-close-button {
+  right: 130px;
 }
 
 @media screen and (min-width: 999px) {
-
   #form .geoapify-autocomplete-input,
+  .vue-treeselect,
   #form .geoapify-autocomplete-items {
     width: 22vw;
     margin: 0 10px;
   }
 
-  #form .geoapify-close-button{
-    right:24px;
+  #form .geoapify-close-button {
+    right: 24px;
   }
 }
 
-
-.vs--disabled .vs__search, .vs--disabled .vs__dropdown-toggle, .vs--disabled .vs__open-indicator {
+.vs--disabled .vs__search,
+.vs--disabled .vs__dropdown-toggle,
+.vs--disabled .vs__open-indicator {
   background-color: transparent;
 }
 
-#textarea, label[for="file"] {
+#textarea,
+label[for="file"] {
   border-color: #f6d185;
 }
-
 </style>

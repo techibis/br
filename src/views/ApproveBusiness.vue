@@ -359,7 +359,7 @@ export default {
 
         try {
           await axios.post(
-            "http://165.22.34.223:4000/upload/" + this.cid,
+            "https://br.softwarefactoryexperts.com:4000/upload/" + this.cid,
             formData
           );
         } catch (err) {

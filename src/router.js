@@ -137,5 +137,10 @@ export default new Router({
       name: "BusinessDashboard",
       component: () => import("./views/BusinessDashboard.vue"),
     },
+    {
+      path: "/validate/:email/:loginid/:md",
+      name: "Validate",
+      component: () => import("./views/validate.vue"),
+    },
   ],
 });

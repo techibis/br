@@ -189,14 +189,20 @@
               Reviewer Location : {{ review.reviewer.city }},
               {{ review.reviewer.state }}
             </p>
-            <p v-if="review.reply !== null">
-              {{ownerCompany.name}} wrote on {{ review.reply.date }} : {{ review.reply.comment }}
-            </p>
+            <p
+              v-if="review.reply !== null"
+            >{{ownerCompany.name}} wrote on {{ review.reply.date }} : {{ review.reply.comment }}</p>
             <hr />
             <br />
           </div>
         </div>
       </div>
+    </div>
+    <div v-else>
+      <h1>No Business has been added yet.</h1>
+      <a href="/add-business-free">
+        <button class="btn add-btn">Add Business Free</button>
+      </a>
     </div>
   </div>
 </template>
@@ -343,8 +349,10 @@ export default {
   font-size: 12px;
 }
 
-.btn-danger {
+.btn-danger{
   float: right;
+}
+.btn-danger, .add-btn {
   box-shadow: 0px 1px 0px 0px #fff6af;
   background: linear-gradient(to bottom, #ffec64 5%, #ffab23 100%);
   background-color: #ffec64;
@@ -359,6 +367,10 @@ export default {
   padding: 6px 24px;
   text-decoration: none;
   text-shadow: 0px 1px 0px #ffee66;
+}
+
+.add-btn {
+  margin-top: 20px;
 }
 
 .btn-danger:hover {

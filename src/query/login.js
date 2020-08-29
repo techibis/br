@@ -8,6 +8,7 @@ const getUserQuery = gql`
       fname
       lname
       type
+      active
     }
   }
 `;

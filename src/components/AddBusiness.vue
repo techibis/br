@@ -76,7 +76,7 @@
         <div class="mt-3">Selected file: {{ file ? file.name : "" }}</div>
       </b-form-group>
 
-      <vue-recaptcha sitekey="Your key here"></vue-recaptcha>
+      <vue-recaptcha sitekey="6Lel18MZAAAAAGTOJE9EOMzCFX8MDqbE08d0_iAp"></vue-recaptcha>
       <b-button type="submit" class="submitButton">Submit</b-button>
     </b-form>
   </div>
@@ -1048,7 +1048,7 @@ export default {
 
         try {
           await axios.post(
-            "http://165.22.34.223:4000/upload/" + this.cid,
+            "https://br.softwarefactoryexperts.com:4000/upload/" + this.cid,
             formData
           );
         } catch (err) {

@@ -1,21 +1,52 @@
 <template>
   <div class="results main-container">
+    <div v-if="company" class="breadcrumbLink">
+      <a href="/">
+        <i class="fa fa-home"></i>
+      </a>
+      <span>/</span>
+      <a href="/">{{ city }}</a>
+      <span>/</span>
+      <a
+        :href="
+          '/companys/' +
+            company.categoryname.short_name +
+            '?lat=' +
+            company.lat +
+            '&lon=' +
+            company.lon
+        "
+      >{{ company.categoryname.short_name }}</a>
+      <span>/</span>
+      <a href>{{ company.name }}</a>
+    </div>
+    <hr />
     <div v-if="company" class="apollo">
       <div class="data">
         <div class="row">
           <div class="col-md-3 logo">
             <img
               v-if="company.logo !== ''"
-              :src="'http://165.22.34.223:4000/'+company.logo"
+              :src="'https://br.softwarefactoryexperts.com:4000/' + company.logo"
               class="logo"
             />
-            <h1 class="letter" v-else :set="name= company.name.charAt(0)">{{name}}</h1>
+            <h1 class="letter" v-else :set="(name = company.name.charAt(0))">{{ name }}</h1>
           </div>
           <div class="col-md-9">
             <h1>{{ company.name }}</h1>
-            <span
-              class="cat"
-            >{{ company.categoryname.name }} > {{ company.categoryname.short_name }}</span>
+            <a
+              class="catLink"
+              :href="
+                '/companys/' +
+                  company.categoryname.short_name +
+                  '?lat=' +
+                  lat +
+                  '&lon=' +
+                  lon
+              "
+            >
+              <span>{{ company.categoryname.short_name }}</span>
+            </a>
             <div class="stars" v-if="company.ratings !== null">
               <star-rating
                 :set="(rating = parseInt(company.ratings.rating))"
@@ -53,13 +84,13 @@
               </a>
               <a
                 :href="
-                      'http://maps.google.com/?q=' +
-                        company.address1 +
-                        ',' +
-                        company.city +
-                        ',' +
-                        company.zip
-                    "
+                  'http://maps.google.com/?q=' +
+                    company.address1 +
+                    ',' +
+                    company.city +
+                    ',' +
+                    company.zip
+                "
                 target="_blank"
               >
                 <button class="wcl">
@@ -69,16 +100,76 @@
               </a>
             </div>
             <hr />
-            <div v-if="company.reviews.length !== 0" :set="count = company.reviews.length">
-              <h2>{{count}} ratings & reviews posted directly on BusinessRate</h2>
+
+            <div class="row">
+              <div v-if="company.ratings !== null" class="col-md-6 extReview">
+                <a style="overflow:hidden;" class="btn btn-light source" target="_blank" href="/">
+                  <div class="row">
+                    <div class="col-md-6 source-logo">
+                      <img
+                        src="@/assets/logo_sm.png"
+                        alt="BusinessRate Logo"
+                      />
+                    </div>
+                    <div class="col-md-6 arrow">
+                      <div class="rating-text-arrow">
+                        <div class="rating-text">
+                          <strong>BusinessRate.com</strong>
+                          <br />
+                          <small>{{company.ratings.revcount}} reviews | {{company.ratings.rating}} average</small>
+                        </div>
+                        <div class="rating-arrow">
+                          <i class="fa fa-angle-right" aria-hidden="true"></i>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </a>
+              </div>
+              <div
+                v-for="extReview in company.extReviews"
+                :key="extReview.id"
+                class="col-md-6 extReview"
+              >
+                <a
+                  style="overflow:hidden;"
+                  class="btn btn-light source"
+                  target="_blank"
+                  :href="'https://'+extReview.source.url"
+                >
+                  <div class="row">
+                    <div class="col-md-6 source-logo">
+                      <img :src="extReview.source.logo" :alt="extReview.source.url" />
+                    </div>
+                    <div class="col-md-6 arrow">
+                      <div class="rating-text-arrow">
+                        <div class="rating-text">
+                          <strong>{{extReview.source.url}}</strong>
+                          <br />
+                          <small>{{extReview.quantity}} reviews | {{extReview.rating}} average</small>
+                        </div>
+                        <div class="rating-arrow">
+                          <i class="fa fa-angle-right" aria-hidden="true"></i>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </a>
+              </div>
+              <hr />
+            </div>
+
+            <div v-if="company.reviews.length !== 0" :set="(count = company.reviews.length)">
+              <!-- <h2>{{count}} ratings & reviews posted directly on BusinessRate</h2> -->
               <div v-for="review in company.reviews" :key="review.rid">
                 <div v-if="review.active === 1">
                   <div class="stars" v-if="company.ratings !== null">
                     <h4>
                       {{ review.fname }} {{ review.lname }}
-                      <span
-                        v-if="review.reviewer !== null"
-                      >- {{ review.reviewer.city }}, {{ review.reviewer.state }}</span>
+                      <span v-if="review.reviewer !== null">
+                        - {{ review.reviewer.city }},
+                        {{ review.reviewer.state }}
+                      </span>
                     </h4>
                     <star-rating
                       :set="(rating = parseInt(review.overall))"
@@ -99,7 +190,7 @@
                     <p>{{ review.comments }}</p>
 
                     <p v-if="review.reply !== null">
-                      <strong>{{company.name}}</strong>
+                      <strong>{{ company.name }}</strong>
                       replied on {{ review.reply.date }} :
                       <strong>{{ review.reply.comment }}</strong>
                     </p>
@@ -141,15 +232,13 @@ export default {
     return {
       cid: "",
       company: null,
+      city: localStorage.getItem("city"),
+      lat: localStorage.getItem("lat"),
+      lon: localStorage.getItem("lon"),
     };
   },
 
   created() {
-    // let url = window.location.href;
-    // if (url.includes("%20")) {
-    //   url = url.replace(/%20/g, "-");
-    //   location.replace(url);
-    // }
     this.cid = this.$route.params.cid;
   },
 
@@ -172,6 +261,26 @@ export default {
 .results {
   padding: 8vw 5vw;
   background-color: #eff0f0;
+}
+
+.breadcrumbLink a {
+  font-size: 14px;
+  color: #db9422;
+  margin: 0 10px;
+  text-decoration: none;
+}
+.breadcrumbLink span {
+  font-size: 14px;
+  color: #ccc;
+}
+
+.breadcrumbLink a:hover {
+  color: #f1c05d;
+}
+
+.breadcrumbLink {
+  display: inline;
+  text-align: left;
 }
 
 .data {
@@ -260,8 +369,13 @@ export default {
   padding: 0;
 }
 
-.col-md-9 .cat {
-  color: rgb(0, 72, 255);
+.col-md-9 .catLink {
+  font-size: 12px;
+  color: #009fe0;
+  text-decoration: none;
+}
+.col-md-9 .catLink:hover {
+  color: #0d8dc0;
 }
 
 .col-md-9 p {
@@ -309,6 +423,59 @@ h4.span {
   color: grey;
 }
 
+.col-md-6.extReview {
+  margin-bottom: 20px;
+  padding: 0;
+  flex: 0 0 100%;
+  max-width: 100%;
+}
+
+.source {
+  font-size: 10px;
+}
+
+.source-logo {
+  display: block;
+  margin: auto;
+  text-align: center;
+}
+
+.source-logo img {
+  width: 100px;
+}
+
+a.btn.btn-light.source {
+  width: 100%;
+  text-align: center;
+}
+
+.col-md-6.arrow {
+  padding-right: 5px;
+  margin: auto;
+}
+
+.rating-text-arrow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  text-align: center;
+}
+
+a.btn.btn-light.source .row {
+  flex-wrap: nowrap;
+  height: 85px;
+}
+
+.fa-angle-right:before {
+    font-size: 30px;
+    font-weight: 500;
+}
+
+@media screen and (min-width: 450px) {
+  .source {
+    font-size: 14px;
+  }
+}
 @media screen and (min-width: 640px) {
   .data {
     width: 90%;
@@ -334,11 +501,21 @@ h4.span {
   .col-md-9 {
     padding-left: 40px;
   }
+
+  .source {
+    font-size: 14px;
+  }
 }
 
 @media screen and (min-width: 1299px) {
   .col-md-3.logo img {
     width: inherit;
+  }
+  .col-md-6.extReview{
+    max-width: 49%;
+  }
+  .col-md-6.extReview:nth-child(odd){
+    margin-right: auto;
   }
 }
 </style>

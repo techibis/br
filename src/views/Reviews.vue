@@ -11,7 +11,7 @@
           <div class="col-md-3 logo">
             <img
               v-if="company.logo !== ''"
-              :src="'http://165.22.34.223:4000/'+company.logo"
+              :src="'https://br.softwarefactoryexperts.com:4000/'+company.logo"
               class="logo"
             />
             <h1 class="letter" v-else :set="name= company.name.charAt(0)">{{name}}</h1>

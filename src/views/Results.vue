@@ -1,6 +1,11 @@
 <template>
   <div class="results main-container">
-    <h1>All Companys for: " {{ companyCat }} "</h1>
+    <div class="breadcrumbLink">
+        <a href="/"><i class="fa fa-home"></i></a><span>/</span>
+        <a href="/">{{city}}</a><span>/</span>
+        <a :href="'/companys/' + companyCat + '?lat=' + lat + '&lon='+ lon ">{{ companyCat }}</a>
+    </div>
+    <hr>
     <div v-if="category" class="apollo">
       <div class="data" v-for="company in category.companys" :key="company.lat">
         <div v-if="company.favorite === 1">
@@ -9,7 +14,7 @@
               <div class="col-md-3 logo">
                 <img
                   v-if="company.logo !== ''"
-                  :src="'http://165.22.34.223:4000/'+company.logo"
+                  :src="'https://br.softwarefactoryexperts.com:4000/'+company.logo"
                   class="logo"
                 />
                 <h1 class="letter" v-else :set="name= company.name.charAt(0)">{{name}}</h1>
@@ -115,7 +120,7 @@
             <div class="col-md-3 logo">
               <img
                 v-if="company.logo !== ''"
-                :src="'http://165.22.34.223:4000/'+company.logo"
+                :src="'https://br.softwarefactoryexperts.com:4000/'+company.logo"
                 class="logo"
               />
               <h1 class="letter" v-else :set="name= company.name.charAt(0)">{{name}}</h1>
@@ -124,13 +129,14 @@
               <a :href="'/companys/' + company.name + '/' + company.cid" target="_blank">
                 <h1>{{ company.rank }}. {{ company.name }}</h1>
               </a>
-              <span>
-                {{
-                company.categoryname.name
-                }} > {{
-                company.categoryname.short_name
-                }}
-              </span>
+              <a class="catLink" :href="'/companys/' + companyCat + '?lat=' + lat + '&lon='+ lon ">
+                <span>
+                  {{
+                  company.categoryname.short_name
+                  }}
+                </span>
+              </a>
+              
               <p :set="distance= parseInt(company.distance)">Distance : {{distance}} Mile(s)</p>
               <p>{{ company.descr }}</p>
               <div v-if="company.ratings !== null">
@@ -194,6 +200,7 @@ export default {
       lat: "",
       lon: "",
       companyCat: "",
+      city: localStorage.getItem("city")
     };
   },
 
@@ -357,12 +364,42 @@ export default {
   text-align: left;
 }
 
+
 .results a {
   text-decoration: none;
+  cursor: pointer;
   font-size: 16px;
   color: black;
-  cursor: pointer;
 }
+
+.results a.catLink{
+  font-size: 12px;
+  color: #009fe0;
+
+}
+.breadcrumbLink a {
+  font-size: 14px;
+  color: #db9422;
+  margin:0 10px;
+  text-decoration: none;
+
+}
+.breadcrumbLink span{
+  font-size: 14px;
+  color: #ccc;
+}
+
+.breadcrumbLink a:hover {
+  color: #f1c05d;
+
+}
+
+.breadcrumbLink{
+  display: inline;
+  text-align: left;
+}
+
+
 .logo img {
   width: 100%;
 }
